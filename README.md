@@ -13,7 +13,7 @@ sudo apt-get install git clang-15 cmake
 
 ### Clone repository
 ```bash
-git clone --recursive https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker.git
+git clone --recursive git@gitlab.unige.ch:Nikolay.Chikin/ctl-model-checker.git
 ```
 
 ### Build project
