@@ -14,3 +14,9 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 * Partitioning (2 weeks)
 * BDD encoding (2 weeks)
 * Formula evaluation (2 weeks)
+
+# 2023-03-14
+
+## New contrib libs
+* [argparse](https://github.com/p-ranav/argparse) - Used for parsing CLI arguments.
+* [PEGTL](https://github.com/taocpp/PEGTL) - Used for parsing CTL formula, building AST and AST rewriting.
