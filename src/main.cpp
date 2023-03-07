@@ -1,12 +1,11 @@
 #include <args/args.h>
+#include <CTLparser/parser.h>
 #include <iostream>
 
 int main(int argc, char *argv[]) {
-    Args args(argc, argv);
+    const Args args(argc, argv);
 
-    std::cout << args.formula << std::endl;
-    std::cout << args.model << std::endl;
-    std::cout << args.output << std::endl;
+    parseFormula(args.formula);
 
     return 0;
 }
