@@ -44,7 +44,7 @@ struct EF : seq<E, F, P0> {};
 struct AG : seq<A, G, P0> {};
 struct EG : seq<E, G, P0> {};
 
-struct PU : pad<U, space> {};
+struct PU : pad<U, Space> {};
 struct SFUFS : seq<SBL, P5, PU, P5, SBR> {};
 
 struct AU : seq<A, SFUFS> {};
