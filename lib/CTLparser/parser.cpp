@@ -72,14 +72,14 @@ struct rearrange : parse_tree::apply<rearrange> {
             n = std::move(op);
         } else {
             auto& c = n->children;
-            auto f = std::move(c.front());
-            c.erase(c.begin());
-            auto o = std::move(c.front());
-            c.erase(c.begin());
-            o->children.push_back(std::move(f));
+            auto f = std::move(c.back());
+            c.pop_back();
+            auto o = std::move(c.back());
+            c.pop_back();
             o->children.push_back(std::move(n));
-            n = std::move( o );
-            transform(n->children.back(), st...);
+            o->children.push_back(std::move(f));
+            n = std::move(o);
+            transform(n->children.front(), st...);
         }
     }
 };
