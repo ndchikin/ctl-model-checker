@@ -17,7 +17,7 @@ struct Space : utf8::one<' '> {};
 struct Not : utf8::one<U'¬'> {};
 struct And : pad<utf8::one<U'∧'>, Space> {};
 struct Or : pad<utf8::one<U'∨'>, Space> {};
-struct Implies : pad<utf8::one<U'⇒'>, Space> {};
+struct Imply : pad<utf8::one<U'⇒'>, Space> {};
 struct IFF : pad<utf8::one<U'⇔'>, Space> {};
 
 struct RBL : utf8::one<'('> {};
@@ -56,7 +56,7 @@ struct P0 : sor<TOP, Boolean, Atom, Bracketed> {};
 struct P1 : seq<opt<Not>, P0> {};
 struct P2 : list<P1, And> {};
 struct P3 : list<P2, Or> {};
-struct P4 : list<P3, Implies> {};
+struct P4 : list<P3, Imply> {};
 struct P5 : list<P4, IFF> {};
 
 struct Grammar : must<P5, eof> {};
@@ -104,7 +104,7 @@ using Selector = parse_tree::selector<
         Not,
         And,
         Or,
-        Implies,
+        Imply,
         IFF,
         AX,
         EX,
