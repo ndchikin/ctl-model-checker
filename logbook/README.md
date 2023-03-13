@@ -17,6 +17,21 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 
 # 2023-03-14
 
-## New contrib libs
+## Research
+* Original paper
+* CTL grammar
 * [argparse](https://github.com/p-ranav/argparse) - Used for parsing CLI arguments.
 * [PEGTL](https://github.com/taocpp/PEGTL) - Used for parsing CTL formula, building AST and AST rewriting.
+
+## Ojective
+* Rewrite temporal operators in CTL formula to forward trawersal operators where it's possible
+
+## Result
+* We have MVP for building AST for CTL formulas
+
+## Next goal
+* Rewrite temporal operators in AST to forward trawersal operators
+
+## Who did what
+* Jing - Presentation and research
+* Nikolay - Programming
