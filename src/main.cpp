@@ -3,6 +3,6 @@
 
 int main(int argc, char *argv[]) {
     const Args args(argc, argv);
-    parseFormula(args.formula);
+    parse_formula(args.formula);
     return 0;
 }

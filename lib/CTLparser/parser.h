@@ -1,3 +1,3 @@
 #include <string>
 
-void parseFormula(const std::string& path);
+void parse_formula(const std::string& path);
