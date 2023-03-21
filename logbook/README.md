@@ -39,4 +39,4 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 # 2023-03-21
 
 ## Result
-* We have reduced set of operators in AST to {true, false, ¬, ∧, EX, EU, EG}
+* We have reduced set of operators in AST to {true, false, ¬, ∧, EX, EU, EG} (Nikolay)
