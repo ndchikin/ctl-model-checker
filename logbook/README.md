@@ -35,3 +35,8 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 ## Who did what
 * Jing - Presentation and research
 * Nikolay - Programming
+
+# 2023-03-21
+
+## Result
+* We have reduced set of operators in AST to {true, false, ¬, ∧, EX, EU, EG}
