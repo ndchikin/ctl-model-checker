@@ -1,7 +1,7 @@
-add_executable(CTL-model-checker main.cpp)
-target_link_libraries(CTL-model-checker args CTLparser)
+add_executable(ctl-model-checker main.cpp)
+target_link_libraries(ctl-model-checker PRIVATE args ctl_parser)
 
 install(
-    TARGETS CTL-model-checker
+    TARGETS ctl-model-checker
     DESTINATION ${PROJECT_SOURCE_DIR}/programs
 )

@@ -1,8 +1,8 @@
 #include <args/args.h>
-#include <CTLparser/parser.h>
+#include <ctl_parser/parser.h>
 
 int main(int argc, char *argv[]) {
     const Args args(argc, argv);
-    parse_formula(args.formula);
+    auto ast_root = parse_formula(args.formula);
     return 0;
 }
