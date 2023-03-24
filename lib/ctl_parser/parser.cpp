@@ -1,7 +1,7 @@
 #include <ctl_parser/common.h>
+#include <ctl_parser/parser.h>
 #include <ctl_parser/visitor.h>
 #include <iostream>
-#include <tao/pegtl/contrib/parse_tree.hpp>
 #include <tao/pegtl/contrib/parse_tree_to_dot.hpp>
 
 template<typename Node>
