@@ -59,8 +59,8 @@ struct P5 : list<P4, IFF> {};
 
 struct Grammar : must<P5, eof> {};
 
-struct P;
+struct p0;
 struct EQ;
 struct Img;
-struct FU;
-struct FG;
+struct FwdUntil;
+struct FwdGlobal;

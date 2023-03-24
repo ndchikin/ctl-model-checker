@@ -1,7 +1,5 @@
-#include <cstdint>
 #include <cstdlib>
 #include <sylvan_obj.hpp>
-#include <unordered_map>
 
 void init_sylvan() {
     lace_start(0, 0);
@@ -14,32 +12,67 @@ void free_sylvan() {
     sylvan::sylvan_quit();
 }
 
-// class BDD {
-// private:
-//     sylvan::Bdd initial;
-//     sylvan::BddSet initial;
+class BDD {
+private:
+    sylvan::Bdd initial_states;
+    sylvan::Bdd transition_relation;
+    sylvan::BddSet variables;
+    sylvan::BddSet all_variables;
+    std::vector<uint8_t> values;
 
-//     uint64_t to_index(const std::string& state);
+public:
+    BDD() : all_variables(sylvan::sylvan_false), values(sizeof(uint64_t) * 8 * 2) {
+        for (uint32_t i = 0; i < values.size(); ++i) {
+            variables.add(i);
+        }
+    };
 
-// public:
-//     void add_initial(const std::string& state) {
-//         auto index = to_index(state);
+    void add(uint64_t initial_state) {
+        uint8_t shift;
+        for (size_t i = 0; i < 64; ++i) {
+            shift = 63 - i;
+            values[i * 2] = (initial_state >> shift) & 1;
+            values[i * 2 + 1] = 2;
+        }
+        initial_states = initial_states.UnionCube(variables, values);
+    }
 
-//     }
-// }
+    void add(uint64_t beg, uint64_t end) {
+        uint8_t shift;
+        for (size_t i = 0; i < 64; ++i) {
+            shift = 63 - i;
+            values[i * 2] = (beg >> shift) & 1;
+            values[i * 2 + 1] = (end >> shift) & 1;
+        }
+        transition_relation = transition_relation.UnionCube(variables, values);
+    }
+
+    sylvan::Bdd next(sylvan::Bdd cur) {
+        return cur.RelNext(transition_relation, all_variables);
+    }
+
+    void print() {
+        auto f = std::fopen("dot.txt", "w");
+        initial_states.PrintDot(f);
+        std::fclose(f);
+    }
+};
 
 int main() {
     init_sylvan();
-    std::vector<uint32_t> vars({0, 1, 2, 3, 4, 5, 6, 7, 8});
-    std::vector<uint8_t> vals1({1, 0, 1, 0, 1, 0, 1, 0, 1});
-    std::vector<uint8_t> vals2({0, 1, 0, 1, 0, 1, 0, 1, 0});
-    auto set = sylvan::BddSet::fromVector(vars);
-    sylvan::Bdd bdd;
-    bdd = bdd.UnionCube(set, vals1);
-    bdd = bdd.UnionCube(set, vals2);
-    auto f = std::fopen("dot.txt", "w");
-    bdd.PrintDot(f);
-    std::fclose(f);
+    BDD bdd;
+    bdd.add(1);
+    bdd.add(2);
+    bdd.add(3);
+    bdd.add(4);
+    bdd.add(5);
+    bdd.add(6);
+    bdd.add(7);
+    bdd.add(8);
+    bdd.add(9);
+    bdd.add(10);
+    bdd.add(11);
+    bdd.print();
     free_sylvan();
     return 0;
 }
