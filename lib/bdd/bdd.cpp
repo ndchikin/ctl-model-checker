@@ -1,9 +1,9 @@
-#include <cstdlib>
+#include <iostream>
 #include <sylvan_obj.hpp>
 
 void init_sylvan() {
     lace_start(0, 0);
-    sylvan::sylvan_set_sizes(1<<10, 1<<12, 1<<10, 1<<12);
+    sylvan::sylvan_set_sizes(1 << 10, UINT64_C(1) << 28, 1 << 10, UINT64_C(1) << 28);
     sylvan::sylvan_init_package();
     sylvan::sylvan_init_bdd();
 }
@@ -13,28 +13,29 @@ void free_sylvan() {
 }
 
 class BDD {
-private:
+public:
     sylvan::Bdd initial_states;
     sylvan::Bdd transition_relation;
-    sylvan::BddSet variables;
+    sylvan::BddSet state_variables;
+    sylvan::BddSet relation_variables;
     sylvan::BddSet all_variables;
     std::vector<uint8_t> values;
 
 public:
     BDD() : all_variables(sylvan::sylvan_false), values(sizeof(uint64_t) * 8 * 2) {
         for (uint32_t i = 0; i < values.size(); ++i) {
-            variables.add(i);
+            if (i % 2 == 0) {
+                state_variables.add(i);
+            }
+            relation_variables.add(i);
         }
     };
 
     void add(uint64_t initial_state) {
-        uint8_t shift;
         for (size_t i = 0; i < 64; ++i) {
-            shift = 63 - i;
-            values[i * 2] = (initial_state >> shift) & 1;
-            values[i * 2 + 1] = 2;
+            values[i] = (initial_state >> (63 - i)) & 1;
         }
-        initial_states = initial_states.UnionCube(variables, values);
+        initial_states = initial_states.UnionCube(state_variables, values);
     }
 
     void add(uint64_t beg, uint64_t end) {
@@ -44,7 +45,7 @@ public:
             values[i * 2] = (beg >> shift) & 1;
             values[i * 2 + 1] = (end >> shift) & 1;
         }
-        transition_relation = transition_relation.UnionCube(variables, values);
+        transition_relation = transition_relation.UnionCube(relation_variables, values);
     }
 
     sylvan::Bdd next(sylvan::Bdd cur) {
@@ -61,18 +62,16 @@ public:
 int main() {
     init_sylvan();
     BDD bdd;
-    bdd.add(1);
-    bdd.add(2);
-    bdd.add(3);
-    bdd.add(4);
-    bdd.add(5);
-    bdd.add(6);
-    bdd.add(7);
-    bdd.add(8);
-    bdd.add(9);
-    bdd.add(10);
-    bdd.add(11);
+    for (size_t i = 0; i < 10000000; ++i) {
+        if (i % 1000000 == 0) {
+            std::cout << i << '\n';
+        }
+        if (i % 13 == 0) {
+            bdd.add(i);
+        }
+    }
     bdd.print();
+    std::cout << bdd.initial_states.NodeCount() << '\n';
     free_sylvan();
     return 0;
 }
