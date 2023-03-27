@@ -40,3 +40,18 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 
 ## Result
 * We have reduced set of operators in AST to {true, false, ¬, ∧, EX, EU, EG} (Nikolay)
+
+# 2023-03-28
+
+## Research
+* [sylvan](https://github.com/trolando/sylvan) - multi-core binary decision diagrams with native support for image and preimage operations
+
+## Ojective
+* Fully understand BBDs. In particular how to partition transition relation
+* Discover the best way to input FSM into our model checker (there are many different formats)
+
+## Result
+* We have completed the CTL formula parser. Now it can reproduce example from the reference paper
+
+## Next goal
+* Decide on the file format with the description of FSM and how to read it
