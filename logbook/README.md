@@ -6,7 +6,7 @@ This week we researched suggested paper: [CTL Model Checking Based on Forward St
 
 ## Architecture
 
-![](arch.png)
+![model checker architecture](arch.png)
 Our CTL model checker takes a CTL formula and a model (FSM) as input. After a series of transformations and evaluation we get the initial states of the FSM that satisfy the property expressed by the CTL formula.
 
 ## General plan
