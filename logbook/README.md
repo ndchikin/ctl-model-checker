@@ -1,12 +1,16 @@
 # 2023-03-07
+
 ## Research
+
 This week we researched suggested paper: [CTL Model Checking Based on Forward State Traversal](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.469.1817&rep=rep1&type=pdf). Normaly temporal operators in a CTL formula are evaluated with backward state traversal. The paper describes a way to speed up CTL model checking by conwerting temporal operators into forward traversal operators. According to experiments on large models this method shows significant evaluation time improvement compared to backward state traversal when many temporal operators in a CTL formula are converted into forward traversal operators and transition relation is partitioned.
 
 ## Architecture
+
 ![](arch.png)
 Our CTL model checker takes a CTL formula and a model (FSM) as input. After a series of transformations and evaluation we get the initial states of the FSM that satisfy the property expressed by the CTL formula.
 
 ## General plan
+
 * Tokenization (1 week)
 * AST (1 week)
 * Rewriting (1 week)
@@ -18,40 +22,50 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 # 2023-03-14
 
 ## Research
+
 * Original paper
 * CTL grammar
 * [argparse](https://github.com/p-ranav/argparse) - Used for parsing CLI arguments.
 * [PEGTL](https://github.com/taocpp/PEGTL) - Used for parsing CTL formula, building AST and AST rewriting.
 
 ## Ojective
+
 * Rewrite temporal operators in CTL formula to forward trawersal operators where it's possible
 
 ## Result
+
 * We have MVP for building AST for CTL formulas
 
 ## Next goal
+
 * Rewrite temporal operators in AST to forward trawersal operators
 
 ## Who did what
+
 * Jing - Presentation and research
 * Nikolay - Programming
 
 # 2023-03-21
 
 ## Result
+
 * We have reduced set of operators in AST to {true, false, ¬, ∧, EX, EU, EG} (Nikolay)
 
 # 2023-03-28
 
 ## Research
+
 * [sylvan](https://github.com/trolando/sylvan) - multi-core binary decision diagrams with native support for image and preimage operations
 
 ## Ojective
+
 * Fully understand BBDs. In particular how to partition transition relation
 * Discover the best way to input FSM into our model checker (there are many different formats)
 
 ## Result
+
 * We have completed the CTL formula parser. Now it can reproduce example from the reference paper
 
 ## Next goal
+
 * Decide on the file format with the description of FSM and how to read it
