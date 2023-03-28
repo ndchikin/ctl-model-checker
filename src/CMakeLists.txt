@@ -1,5 +1,5 @@
 add_executable(ctl-model-checker main.cpp)
-target_link_libraries(ctl-model-checker PRIVATE args ctl_parser)
+target_link_libraries(ctl-model-checker PRIVATE args ctl fsm)
 
 install(
     TARGETS ctl-model-checker

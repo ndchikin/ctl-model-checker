@@ -1,8 +1,4 @@
-#include <ctl_parser/common.h>
-#include <ctl_parser/parser.h>
-#include <ctl_parser/visitor.h>
-#include <iostream>
-#include <tao/pegtl/contrib/parse_tree_to_dot.hpp>
+#include <parsers/ctl/visitor.h>
 
 template<typename Node>
 std::unique_ptr<Node> copy(const std::unique_ptr<Node>& n) {
@@ -240,11 +236,3 @@ struct Selector<AU> : std::true_type {
         n = std::move(not0);
     }
 };
-
-std::unique_ptr<parse_tree::node> parse_formula(const std::string& path) {
-    file_input input(path);
-    auto root = parse_tree::parse<Grammar, Selector>(input);
-    visit(root);
-    parse_tree::print_dot(std::cout, *root);
-    return root;
-}

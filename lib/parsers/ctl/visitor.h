@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ctl_parser/common.h>
+#include <parsers/ctl/common.h>
 
 template<typename Node>
 void replace_eg(std::unique_ptr<Node>& n) {

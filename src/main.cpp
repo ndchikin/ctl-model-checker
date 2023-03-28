@@ -1,8 +1,10 @@
 #include <args/args.h>
-#include <ctl_parser/parser.h>
+#include <parsers/ctl/ctl.h>
+#include <parsers/fsm/fsm.h>
 
 int main(int argc, char *argv[]) {
     const Args args(argc, argv);
-    auto ast_root = parse_formula(args.formula);
+    auto ast = CTL(args.formula);
+    auto fsm = FSM(args.model);
     return 0;
 }
