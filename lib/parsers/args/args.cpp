@@ -1,5 +1,5 @@
 #include <argparse/argparse.hpp>
-#include <args/args.h>
+#include <parsers/args/args.h>
 #include <config/config.h>
 
 Args::Args(int argc, char *argv[]) {
