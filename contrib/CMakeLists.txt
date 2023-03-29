@@ -7,6 +7,8 @@ add_subdirectory(PEGTL)
 add_subdirectory(sylvan)
 target_compile_options(sylvan PRIVATE -Wno-unused-but-set-parameter)
 
+add_subdirectory(fmt)
+
 # include(FetchContent)
 # FetchContent_Declare(
 #   nusmv

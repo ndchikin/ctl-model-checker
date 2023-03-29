@@ -33,5 +33,6 @@ private:
 
 public:
     FSM(const std::string& path);
+    void print();
     ~FSM();
 };
