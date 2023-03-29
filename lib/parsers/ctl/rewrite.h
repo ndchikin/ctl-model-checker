@@ -1,5 +1,6 @@
 #include <parsers/ctl/common.h>
 #include <parsers/ctl/visitor.h>
+#include <tao/pegtl/contrib/parse_tree.hpp>
 
 template<typename Node>
 std::unique_ptr<Node> copy(const std::unique_ptr<Node>& n) {
