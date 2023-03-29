@@ -2,10 +2,10 @@
 
 #include <string>
 
-struct Args {
+struct CLI {
     std::string formula;
     std::string model;
     std::string output;
 
-    Args(int argc, char *argv[]);
+    CLI(int argc, char *argv[]);
 };

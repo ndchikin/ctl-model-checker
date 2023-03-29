@@ -1,10 +1,10 @@
-#include <parsers/args/args.h>
+#include <parsers/cli/cli.h>
 #include <parsers/ctl/ctl.h>
 #include <parsers/fsm/fsm.h>
 
 int main(int argc, char *argv[]) {
-    const Args args(argc, argv);
-    auto ast = CTL(args.formula);
-    auto fsm = FSM(args.model);
+    const CLI cli(argc, argv);
+    auto ast = CTL(cli.formula);
+    auto fsm = FSM(cli.model);
     return 0;
 }

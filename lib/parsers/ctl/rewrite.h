@@ -1,3 +1,4 @@
+#include <parsers/ctl/common.h>
 #include <parsers/ctl/visitor.h>
 
 template<typename Node>
