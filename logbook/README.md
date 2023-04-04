@@ -69,3 +69,28 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 ## Next goal
 
 * Decide on the file format with the description of FSM and how to read it
+
+# 2023-04-04
+
+## Research
+
+* [fmt](https://github.com/fmtlib/fmt.git) - used for printing C++ std containers
+* Papers about BDDs, logic and model checking
+    * [Sylvan: multi-core framework for decision diagrams](https://link.springer.com/content/pdf/10.1007/s10009-016-0433-2.pdf?pdf=button)
+    * [Generating BDDs for Symbolic Model Checking in CCS](https://link.springer.com/content/pdf/10.1007/3-540-55179-4_20.pdf)
+    * [A Comparative Study of BDD Packages for Probabilistic
+Symbolic Model Checking](https://www.tvandijk.nl/pdf/2015setta.pdf)
+
+## Result
+
+* We have an MVP for the FSM parser and building the basic BDD structures
+
+## Next goal
+
+* Decide on the file format with the description of FSM and how to read it
+* Understand how to partition transition relation
+
+## Who did what
+
+* Jing - Presentation and research
+* Nikolay - Programming
