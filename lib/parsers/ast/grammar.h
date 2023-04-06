@@ -60,7 +60,7 @@ struct P5 : list<P4, IFF> {};
 struct Grammar : must<P5, eof> {};
 
 struct p0;
-struct EQ;
+struct Eq;
 struct Img;
-struct FwdUntil;
-struct FwdGlobal;
+struct FU;
+struct FG;

@@ -25,7 +25,7 @@ void FSM::init_vars() {
     }
 }
 
-void FSM::read(const std::string& path) {
+void FSM::read_fsm(const std::string& path) {
     state_t n;
     state_t m;
     state_t b;
@@ -93,18 +93,32 @@ void FSM::add_label(state_t state, state_t label) {
     label_relation = label_relation.UnionCube(relation_variables, values);
 }
 
-sylvan::Bdd FSM::next(sylvan::Bdd cur) {
-    return cur.RelNext(transition_relation, all_variables);
-}
-
 FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
     if (instances == 0) {
         init_sylvan();
     }
     ++instances;
     init_vars();
-    read(path);
+    read_fsm(path);
 };
+
+// sylvan::Bdd FSM::label(const std::string& label) {
+//     uint8_t shift;
+//     auto index = label_to_index.at(label);
+//     for (size_t i = 0; i < STATE_BITS; ++i) {
+//         shift = STATE_BITS - 1 - i;
+//         values[i * 2] = (state >> shift) & 1;
+//         values[i * 2 + 1] = (label >> shift) & 1;
+//     }
+// }
+
+sylvan::Bdd FSM::prev(sylvan::Bdd states) {
+    return states.RelPrev(transition_relation, all_variables);
+}
+
+sylvan::Bdd FSM::next(sylvan::Bdd states) {
+    return states.RelNext(transition_relation, all_variables);
+}
 
 void FSM::print() {
     auto f = std::fopen("initial_states.txt", "w");

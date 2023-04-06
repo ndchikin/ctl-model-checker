@@ -5,7 +5,7 @@
 template<typename Node>
 void replace_eg(std::unique_ptr<Node>& n) {
     if (n->template is_type<And>() && n->children.back()->template is_type<EG>()) {
-        auto fg = make_node<Node, FwdGlobal>();
+        auto fg = make_node<Node, FG>();
         auto eg = std::move(n->children.back());
         auto q = std::move(eg->children.front());
         n->children.pop_back();
@@ -21,7 +21,7 @@ void replace_eg(std::unique_ptr<Node>& n) {
 template<typename Node>
 void replace_eu(std::unique_ptr<Node>& n) {
     if (n->template is_type<And>() && n->children.back()->template is_type<EU>()) {
-        auto fu = make_node<Node, FwdUntil>();
+        auto fu = make_node<Node, FU>();
         auto and0 = make_node<Node, And>();
         auto eu = std::move(n->children.back());
         auto q = std::move(eu->children.front());
@@ -60,7 +60,7 @@ template<typename Node>
 void replace_root(std::unique_ptr<Node>& n) {
     std::unique_ptr<Node> eq_bool;
     auto p = make_node<Node, p0>();
-    auto eq = make_node<Node, EQ>();
+    auto eq = make_node<Node, Eq>();
     auto and0 = make_node<Node, And>();
     n = std::move(n->children.front());
     if (n->template is_type<Not>()) {

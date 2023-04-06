@@ -2,10 +2,6 @@
 
 #include <tao/pegtl/contrib/parse_tree.hpp>
 
-class AST {
-private:
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
+typedef tao::pegtl::parse_tree::node node_t;
 
-public:
-    AST(const std::string& path);
-};
+std::unique_ptr<node_t> make_ast(const std::string& path);

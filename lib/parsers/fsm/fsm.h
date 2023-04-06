@@ -26,15 +26,19 @@ private:
     void init_sylvan();
     void free_sylvan();
     void init_vars();
-    void read(const std::string& path);
+    void read_fsm(const std::string& path);
 
     void add_initial_state(state_t initial_state);
     void add_edge(state_t beg, state_t end);
     void add_label(state_t state, state_t label);
-    sylvan::Bdd next(sylvan::Bdd cur);
 
 public:
     FSM(const std::string& path);
+
+    // sylvan::Bdd label(const std::string& label);
+    sylvan::Bdd prev(sylvan::Bdd states);
+    sylvan::Bdd next(sylvan::Bdd states);
     void print();
+
     ~FSM();
 };
