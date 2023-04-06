@@ -1,4 +1,3 @@
-#include <fmt/ranges.h>
 #include <fstream>
 #include <parsers/fsm/fsm.h>
 
@@ -108,8 +107,6 @@ FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(
 };
 
 void FSM::print() {
-    fmt::print("{}\n", state_to_index);
-    fmt::print("{}\n", label_to_index);
     auto f = std::fopen("initial_states.txt", "w");
     initial_states.PrintDot(f);
     std::fclose(f);

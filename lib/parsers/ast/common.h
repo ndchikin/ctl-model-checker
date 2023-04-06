@@ -1,6 +1,6 @@
 #pragma once
 
-#include <parsers/ctl/grammar.h>
+#include <parsers/ast/grammar.h>
 
 template<typename Node, typename T>
 std::unique_ptr<Node> make_node() {

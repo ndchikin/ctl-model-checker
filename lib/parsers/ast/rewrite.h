@@ -1,5 +1,7 @@
-#include <parsers/ctl/common.h>
-#include <parsers/ctl/visitor.h>
+#pragma once
+
+#include <parsers/ast/common.h>
+#include <parsers/ast/visitor.h>
 #include <tao/pegtl/contrib/parse_tree.hpp>
 
 template<typename Node>

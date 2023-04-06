@@ -1,3 +1,5 @@
+#pragma once
+
 #include <sylvan_obj.hpp>
 #include <unordered_map>
 

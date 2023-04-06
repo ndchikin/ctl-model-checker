@@ -1,7 +1,7 @@
-#include <parsers/ctl/ctl.h>
-#include <parsers/ctl/rewrite.h>
+#include <parsers/ast/ast.h>
+#include <parsers/ast/rewrite.h>
 
-CTL::CTL(const std::string& path) {
+AST::AST(const std::string& path) {
     file_input input(path);
     root = parse_tree::parse<Grammar, Selector>(input);
     visit(root);

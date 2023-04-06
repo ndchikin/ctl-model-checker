@@ -2,10 +2,10 @@
 
 #include <tao/pegtl/contrib/parse_tree.hpp>
 
-class CTL {
+class AST {
 private:
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
 public:
-    CTL(const std::string& path);
+    AST(const std::string& path);
 };
