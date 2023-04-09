@@ -8,9 +8,8 @@ typedef uint32_t state_t;
 
 class FSM {
 private:
-    sylvan::Bdd initial_states;
-    sylvan::Bdd transition_relation;
-    sylvan::Bdd label_relation;
+    sylvan::Bdd state_to_state;
+    sylvan::Bdd state_to_label;
 
     sylvan::BddSet state_variables;
     sylvan::BddSet relation_variables;
@@ -28,16 +27,20 @@ private:
     void init_vars();
     void read_fsm(const std::string& path);
 
-    void add_initial_state(state_t initial_state);
+    void encode(state_t state);
+    void encode(state_t state1, state_t state2);
+    void set_initial_state();
     void add_edge(state_t beg, state_t end);
     void add_label(state_t state, state_t label);
 
 public:
+    sylvan::Bdd initial_state;
+
     FSM(const std::string& path);
 
-    // sylvan::Bdd label(const std::string& label);
     sylvan::Bdd prev(sylvan::Bdd states);
     sylvan::Bdd next(sylvan::Bdd states);
+    sylvan::Bdd label_to_states(const std::string& label);
     void print();
 
     ~FSM();

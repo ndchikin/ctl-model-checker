@@ -28,32 +28,14 @@ void FSM::init_vars() {
 void FSM::read_fsm(const std::string& path) {
     state_t n;
     state_t m;
-    state_t b;
-    state_t l = 0;
     std::string s;
     std::string beg;
     std::string end;
     std::fstream file(path, std::ios_base::in);
     file >> n;
-    for (size_t i = 0; i < n; ++i) {
+    for (size_t i = 0, l = 0; i < n; ++i) {
         file >> s;
         state_to_index[s] = i;
-    }
-    file >> n;
-    for (size_t i = 0; i < n; ++i) {
-        file >> s;
-        add_initial_state(state_to_index.at(s));
-    }
-    file >> n;
-    for (size_t i = 0; i < n; ++i) {
-        file >> beg;
-        file >> end;
-        add_edge(state_to_index.at(beg), state_to_index.at(end));
-    }
-    file >> n;
-    for (size_t i = 0; i < n; ++i) {
-        file >> s;
-        b = state_to_index.at(s);
         file >> m;
         for (size_t j = 0; j < m; ++j) {
             file >> s;
@@ -61,36 +43,47 @@ void FSM::read_fsm(const std::string& path) {
             if (it.second) {
                 ++l;
             }
-            add_label(b, it.first->second);
+            add_label(i, it.first->second);
         }
     }
-}
-
-void FSM::add_initial_state(state_t initial_state) {
-    for (size_t i = 0; i < STATE_BITS; ++i) {
-        values[i] = (initial_state >> (STATE_BITS - 1 - i)) & 1;
+    file >> n;
+    for (size_t i = 0; i < n; ++i) {
+        file >> beg;
+        file >> end;
+        add_edge(state_to_index.at(beg), state_to_index.at(end));
     }
-    initial_states = initial_states.UnionCube(state_variables, values);
 }
 
-void FSM::add_edge(state_t beg, state_t end) {
+void FSM::encode(state_t state) {
+    uint8_t shift;
+    for (size_t i = 0; i < STATE_BITS; ++i) {
+        shift = STATE_BITS - 1 - i;
+        values[i] = (state >> shift) & 1;
+    }
+}
+
+void FSM::encode(state_t beg, state_t end) {
     uint8_t shift;
     for (size_t i = 0; i < STATE_BITS; ++i) {
         shift = STATE_BITS - 1 - i;
         values[i * 2] = (beg >> shift) & 1;
         values[i * 2 + 1] = (end >> shift) & 1;
     }
-    transition_relation = transition_relation.UnionCube(relation_variables, values);
+}
+
+void FSM::set_initial_state() {
+    encode(0);
+    initial_state = initial_state.UnionCube(state_variables, values);
+}
+
+void FSM::add_edge(state_t beg, state_t end) {
+    encode(beg, end);
+    state_to_state = state_to_state.UnionCube(relation_variables, values);
 }
 
 void FSM::add_label(state_t state, state_t label) {
-    uint8_t shift;
-    for (size_t i = 0; i < STATE_BITS; ++i) {
-        shift = STATE_BITS - 1 - i;
-        values[i * 2] = (state >> shift) & 1;
-        values[i * 2 + 1] = (label >> shift) & 1;
-    }
-    label_relation = label_relation.UnionCube(relation_variables, values);
+    encode(state, label);
+    state_to_label = state_to_label.UnionCube(relation_variables, values);
 }
 
 FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
@@ -99,36 +92,34 @@ FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(
     }
     ++instances;
     init_vars();
+    set_initial_state();
     read_fsm(path);
 };
 
-// sylvan::Bdd FSM::label(const std::string& label) {
-//     uint8_t shift;
-//     auto index = label_to_index.at(label);
-//     for (size_t i = 0; i < STATE_BITS; ++i) {
-//         shift = STATE_BITS - 1 - i;
-//         values[i * 2] = (state >> shift) & 1;
-//         values[i * 2 + 1] = (label >> shift) & 1;
-//     }
-// }
-
 sylvan::Bdd FSM::prev(sylvan::Bdd states) {
-    return states.RelPrev(transition_relation, all_variables);
+    return states.RelPrev(state_to_state, all_variables);
 }
 
 sylvan::Bdd FSM::next(sylvan::Bdd states) {
-    return states.RelNext(transition_relation, all_variables);
+    return states.RelNext(state_to_state, all_variables);
+}
+
+sylvan::Bdd FSM::label_to_states(const std::string& label) {
+    auto index = label_to_index.at(label);
+    encode(index);
+    auto label_bdd = sylvan::Bdd::bddCube(state_variables, values);
+    return label_bdd.RelPrev(state_to_label, all_variables);
 }
 
 void FSM::print() {
     auto f = std::fopen("initial_states.txt", "w");
-    initial_states.PrintDot(f);
+    initial_state.PrintDot(f);
     std::fclose(f);
     f = std::fopen("transition_relation.txt", "w");
-    transition_relation.PrintDot(f);
+    state_to_state.PrintDot(f);
     std::fclose(f);
     f = std::fopen("label_relation.txt", "w");
-    label_relation.PrintDot(f);
+    state_to_label.PrintDot(f);
     std::fclose(f);
 }
 

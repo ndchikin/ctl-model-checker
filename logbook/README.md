@@ -76,10 +76,9 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 
 * [fmt](https://github.com/fmtlib/fmt.git) - used for printing C++ std containers
 * Papers about BDDs, logic and model checking
-    * [Sylvan: multi-core framework for decision diagrams](https://link.springer.com/content/pdf/10.1007/s10009-016-0433-2.pdf?pdf=button)
-    * [Generating BDDs for Symbolic Model Checking in CCS](https://link.springer.com/content/pdf/10.1007/3-540-55179-4_20.pdf)
-    * [A Comparative Study of BDD Packages for Probabilistic
-Symbolic Model Checking](https://www.tvandijk.nl/pdf/2015setta.pdf)
+  * [Sylvan: multi-core framework for decision diagrams](https://link.springer.com/content/pdf/10.1007/s10009-016-0433-2.pdf?pdf=button)
+  * [Generating BDDs for Symbolic Model Checking in CCS](https://link.springer.com/content/pdf/10.1007/3-540-55179-4_20.pdf)
+  * [A Comparative Study of BDD Packages for Probabilistic Symbolic Model Checking](https://www.tvandijk.nl/pdf/2015setta.pdf)
 
 ## Result
 
@@ -94,3 +93,35 @@ Symbolic Model Checking](https://www.tvandijk.nl/pdf/2015setta.pdf)
 
 * Jing - Presentation and research
 * Nikolay - Programming
+
+# 2023-04-11
+
+## Research
+
+* Existing model checkers and their input formats
+  * [NuSMV](https://nusmv.fbk.eu/)
+  * [mCRL2](https://mcrl2.org/web/user_manual/language_reference/lts.html)
+
+## Result
+
+* FSM parser and required BDD structures
+* Specification of the FSM input format:
+  1. Number of states n, the first state is the initial state
+  2. Next n lines: state, number of labels, list of labels
+  3. Number of edges m
+  4. Next n lines: state, state
+* Example of FSM input format:
+
+      3
+      S0 2 begin start
+      S1 0
+      S2 1 finish
+      2
+      S0 S1
+      S1 S2
+
+* First steps for formula evaluation
+
+## Next goal
+
+* Finish the code for formula evaluation

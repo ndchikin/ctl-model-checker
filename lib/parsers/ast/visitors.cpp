@@ -1,11 +1,9 @@
-#pragma once
-
 #include <parsers/ast/common.h>
+#include <parsers/ast/grammar.h>
 
-template<typename Node>
-void replace_eg(std::unique_ptr<Node>& n) {
-    if (n->template is_type<And>() && n->children.back()->template is_type<EG>()) {
-        auto fg = make_node<Node, FG>();
+void replace_eg(std::unique_ptr<node_t>& n) {
+    if (n->is_type<And>() && n->children.back()->is_type<EG>()) {
+        auto fg = make_node<FG>();
         auto eg = std::move(n->children.back());
         auto q = std::move(eg->children.front());
         n->children.pop_back();
@@ -18,11 +16,10 @@ void replace_eg(std::unique_ptr<Node>& n) {
     }
 }
 
-template<typename Node>
-void replace_eu(std::unique_ptr<Node>& n) {
-    if (n->template is_type<And>() && n->children.back()->template is_type<EU>()) {
-        auto fu = make_node<Node, FU>();
-        auto and0 = make_node<Node, And>();
+void replace_eu(std::unique_ptr<node_t>& n) {
+    if (n->is_type<And>() && n->children.back()->is_type<EU>()) {
+        auto fu = make_node<FU>();
+        auto and0 = make_node<And>();
         auto eu = std::move(n->children.back());
         auto q = std::move(eu->children.front());
         auto f = std::move(eu->children.back());
@@ -38,11 +35,10 @@ void replace_eu(std::unique_ptr<Node>& n) {
     }
 }
 
-template<typename Node>
-void replace_ex(std::unique_ptr<Node>& n) {
-    if (n->template is_type<And>() && n->children.back()->template is_type<EX>()) {
-        auto img = make_node<Node, Img>();
-        auto and0 = make_node<Node, And>();
+void replace_ex(std::unique_ptr<node_t>& n) {
+    if (n->is_type<And>() && n->children.back()->is_type<EX>()) {
+        auto img = make_node<Img>();
+        auto and0 = make_node<And>();
         auto ex = std::move(n->children.back());
         auto f = std::move(ex->children.front());
         n->children.pop_back();
@@ -56,18 +52,17 @@ void replace_ex(std::unique_ptr<Node>& n) {
     }
 }
 
-template<typename Node>
-void replace_root(std::unique_ptr<Node>& n) {
-    std::unique_ptr<Node> eq_bool;
-    auto p = make_node<Node, p0>();
-    auto eq = make_node<Node, Eq>();
-    auto and0 = make_node<Node, And>();
+void replace_root(std::unique_ptr<node_t>& n) {
+    std::unique_ptr<node_t> eq_bool;
+    auto p = make_node<p0>();
+    auto eq = make_node<Eq>();
+    auto and0 = make_node<And>();
     n = std::move(n->children.front());
-    if (n->template is_type<Not>()) {
-        eq_bool = make_node<Node, False>();
+    if (n->is_type<Not>()) {
+        eq_bool = make_node<False>();
         n = std::move(n->children.front());
     } else {
-        eq_bool = make_node<Node, True>();
+        eq_bool = make_node<True>();
     }
     add_child(and0, p);
     add_child(and0, n);
@@ -76,24 +71,23 @@ void replace_root(std::unique_ptr<Node>& n) {
     n = std::move(eq);
 }
 
-template<typename Node>
-void visit(std::unique_ptr<Node>& n) {
+void rewrite_top(std::unique_ptr<node_t>& n) {
     if (n->is_root()) {
         replace_root(n);
-    } else if (n->template is_type<And>()) {
-        if (n->children.back()->template is_type<EG>()) {
+    } else if (n->is_type<And>()) {
+        if (n->children.back()->is_type<EG>()) {
             replace_eg(n);
-        } else if (n->children.back()->template is_type<EU>()) {
+        } else if (n->children.back()->is_type<EU>()) {
             replace_eu(n);
-            visit(n);
+            rewrite_top(n);
             return;
-        } else if (n->children.back()->template is_type<EX>()) {
+        } else if (n->children.back()->is_type<EX>()) {
             replace_ex(n);
-            visit(n);
+            rewrite_top(n);
             return;
         }
     }
     for (auto& child : n->children) {
-        visit(child);
+        rewrite_top(child);
     }
 }

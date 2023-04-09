@@ -5,9 +5,8 @@
 
 int main(int argc, char *argv[]) {
     const CLI cli(argc, argv);
-    const auto ast_root = make_ast(cli.formula);
-    auto fsm = FSM(cli.model);
-    auto states = evaluate_formula(ast_root, fsm);
-    write_states(cli.output, states);
+    const AST ast(cli.formula);
+    FSM fsm(cli.model);
+    evaluate_formula(ast, fsm, cli.output);
     return 0;
 }

@@ -1,3 +1,3 @@
-add_library(ast ast.cpp)
+add_library(ast ast.cpp common.cpp visitors.cpp rewrite.cpp)
 target_link_libraries(ast PUBLIC taocpp::pegtl)
 target_include_directories(ast PUBLIC ${PROJECT_SOURCE_DIR}/lib)
