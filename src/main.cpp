@@ -6,7 +6,7 @@
 int main(int argc, char *argv[]) {
     const CLI cli(argc, argv);
     const AST ast(cli.formula);
-    FSM fsm(cli.model);
+    const FSM fsm(cli.model);
     evaluate_formula(ast, fsm, cli.output);
     return 0;
 }

@@ -15,7 +15,7 @@ private:
     sylvan::BddSet relation_variables;
     sylvan::BddSet all_variables;
 
-    std::vector<uint8_t> values;
+    mutable std::vector<uint8_t> values;
 
     std::unordered_map<std::string, state_t> state_to_index;
     std::unordered_map<std::string, state_t> label_to_index;
@@ -27,8 +27,8 @@ private:
     void init_vars();
     void read_fsm(const std::string& path);
 
-    void encode(state_t state);
-    void encode(state_t state1, state_t state2);
+    void encode(state_t state) const;
+    void encode(state_t state1, state_t state2) const;
     void set_initial_state();
     void add_edge(state_t beg, state_t end);
     void add_label(state_t state, state_t label);
@@ -38,10 +38,10 @@ public:
 
     FSM(const std::string& path);
 
-    sylvan::Bdd prev(sylvan::Bdd states);
-    sylvan::Bdd next(sylvan::Bdd states);
-    sylvan::Bdd label_to_states(const std::string& label);
-    void print();
+    sylvan::Bdd pre(sylvan::Bdd states) const;
+    sylvan::Bdd img(sylvan::Bdd states) const;
+    sylvan::Bdd label_to_states(const std::string& label) const;
+    void print() const;
 
     ~FSM();
 };

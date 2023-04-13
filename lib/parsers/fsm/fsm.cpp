@@ -54,7 +54,7 @@ void FSM::read_fsm(const std::string& path) {
     }
 }
 
-void FSM::encode(state_t state) {
+void FSM::encode(state_t state) const {
     uint8_t shift;
     for (size_t i = 0; i < STATE_BITS; ++i) {
         shift = STATE_BITS - 1 - i;
@@ -62,7 +62,7 @@ void FSM::encode(state_t state) {
     }
 }
 
-void FSM::encode(state_t beg, state_t end) {
+void FSM::encode(state_t beg, state_t end) const {
     uint8_t shift;
     for (size_t i = 0; i < STATE_BITS; ++i) {
         shift = STATE_BITS - 1 - i;
@@ -73,7 +73,7 @@ void FSM::encode(state_t beg, state_t end) {
 
 void FSM::set_initial_state() {
     encode(0);
-    initial_state = initial_state.UnionCube(state_variables, values);
+    initial_state = sylvan::Bdd::bddCube(state_variables, values);
 }
 
 void FSM::add_edge(state_t beg, state_t end) {
@@ -96,22 +96,22 @@ FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(
     read_fsm(path);
 };
 
-sylvan::Bdd FSM::prev(sylvan::Bdd states) {
+sylvan::Bdd FSM::pre(sylvan::Bdd states) const {
     return states.RelPrev(state_to_state, all_variables);
 }
 
-sylvan::Bdd FSM::next(sylvan::Bdd states) {
+sylvan::Bdd FSM::img(sylvan::Bdd states) const {
     return states.RelNext(state_to_state, all_variables);
 }
 
-sylvan::Bdd FSM::label_to_states(const std::string& label) {
+sylvan::Bdd FSM::label_to_states(const std::string& label) const {
     auto index = label_to_index.at(label);
     encode(index);
     auto label_bdd = sylvan::Bdd::bddCube(state_variables, values);
     return label_bdd.RelPrev(state_to_label, all_variables);
 }
 
-void FSM::print() {
+void FSM::print() const {
     auto f = std::fopen("initial_states.txt", "w");
     initial_state.PrintDot(f);
     std::fclose(f);

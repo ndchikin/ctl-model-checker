@@ -125,3 +125,43 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 ## Next goal
 
 * Finish the code for formula evaluation
+
+# 2023-04-18
+
+## Research
+* In total we have to implement evaluation for 13 types of AST nodes:
+  * True
+  * False
+  * Atom
+  * Not
+  * And
+  * EX
+  * EG
+  * EU
+  * p0
+  * Eq
+  * Img
+  * FU
+  * FG
+
+## Result
+
+* Previous week we implemented evaluation for:
+  * True
+  * False
+  * Atom
+  * Not
+  * And
+  * p0
+  * Eq
+  * Img
+* This week we implemented evaluation for:
+  * EX
+  * EG
+  * EU
+  * FU
+  * FG
+
+## Next goal
+
+* Add tests and find all bugs, if any
