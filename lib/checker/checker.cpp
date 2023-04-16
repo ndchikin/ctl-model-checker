@@ -2,15 +2,12 @@
 #include <fstream>
 #include <parsers/ast/grammar.h>
 #include <stdexcept>
+#include <utility>
 
 typedef const std::function<sylvan::Bdd(const sylvan::Bdd&)>& fp_func;
 
 sylvan::Bdd fp(fp_func f, sylvan::Bdd& Z) {
-    sylvan::Bdd tmp;
-    do {
-        tmp = Z;
-        Z = f(Z);
-    } while (Z != tmp);
+    while (std::exchange(Z, f(Z)) != Z);
     return Z;
 }
 
