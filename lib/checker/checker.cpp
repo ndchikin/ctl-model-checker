@@ -4,19 +4,19 @@
 #include <stdexcept>
 #include <utility>
 
-typedef const std::function<sylvan::Bdd(const sylvan::Bdd&)>& fp_func;
+typedef const std::function<sylvan::Bdd(const sylvan::Bdd&)>& fp_func_t;
 
-sylvan::Bdd fp(fp_func f, sylvan::Bdd& Z) {
+sylvan::Bdd fp(fp_func_t f, sylvan::Bdd& Z) {
     while (std::exchange(Z, f(Z)) != Z);
     return Z;
 }
 
-sylvan::Bdd lfp(fp_func f) {
+sylvan::Bdd lfp(fp_func_t f) {
     sylvan::Bdd Z(sylvan::sylvan_false);
     return fp(f, Z);
 }
 
-sylvan::Bdd gfp(fp_func f) {
+sylvan::Bdd gfp(fp_func_t f) {
     sylvan::Bdd Z(sylvan::sylvan_true);
     return fp(f, Z);
 }
@@ -53,11 +53,7 @@ sylvan::Bdd compute_node(const std::unique_ptr<node_t>& n, const FSM& fsm) {
     } else if (n->is_type<Eq>()) {
         const auto states0 = compute_node(n->children.front(), fsm);
         const auto states1 = compute_node(n->children.back(), fsm);
-        if (states0 == states1) {
-            return sylvan::sylvan_true;
-        } else {
-            return sylvan::sylvan_false;
-        }
+        return states0 == states1 ? sylvan::sylvan_true : sylvan::sylvan_false;
     } else if (n->is_type<Img>()) {
         return fsm.img(compute_node(n->children.front(), fsm));
     } else if (n->is_type<FU>()) {
