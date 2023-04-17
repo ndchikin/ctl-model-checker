@@ -2,10 +2,10 @@
 
 #include <tao/pegtl/contrib/parse_tree.hpp>
 
-typedef tao::pegtl::parse_tree::node node_t;
+using node_t = tao::pegtl::parse_tree::node;
 
 struct AST {
     std::unique_ptr<node_t> root;
 
-    AST(const std::string& path);
+    explicit AST(const std::string& path);
 };

@@ -1,5 +1,6 @@
 #include <parsers/ast/common.h>
 #include <parsers/ast/grammar.h>
+#include <parsers/ast/visitors.h>
 
 void replace_eg(std::unique_ptr<node_t>& n) {
     if (n->is_type<And>() && n->children.back()->is_type<EG>()) {

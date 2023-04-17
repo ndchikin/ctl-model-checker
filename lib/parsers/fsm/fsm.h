@@ -3,8 +3,8 @@
 #include <sylvan_obj.hpp>
 #include <unordered_map>
 
-typedef uint32_t var_t;
-typedef uint32_t state_t;
+using var_t = uint32_t;
+using state_t = uint32_t;
 
 class FSM {
 private:
@@ -22,13 +22,13 @@ private:
 
     static uint64_t instances;
 
-    void init_sylvan();
-    void free_sylvan();
+    static void init_sylvan();
+    static void free_sylvan();
     void init_vars();
     void read_fsm(const std::string& path);
 
     void encode(state_t state) const;
-    void encode(state_t state1, state_t state2) const;
+    void encode(state_t beg, state_t end) const;
     void set_initial_state();
     void add_edge(state_t beg, state_t end);
     void add_label(state_t state, state_t label);
@@ -36,10 +36,10 @@ private:
 public:
     sylvan::Bdd initial_state;
 
-    FSM(const std::string& path);
+    explicit FSM(const std::string& path);
 
-    sylvan::Bdd pre(sylvan::Bdd states) const;
-    sylvan::Bdd img(sylvan::Bdd states) const;
+    sylvan::Bdd pre(const sylvan::Bdd& states) const;
+    sylvan::Bdd img(const sylvan::Bdd& states) const;
     sylvan::Bdd label_to_states(const std::string& label) const;
     void print() const;
 

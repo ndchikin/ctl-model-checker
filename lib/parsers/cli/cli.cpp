@@ -1,6 +1,6 @@
 #include <argparse/argparse.hpp>
-#include <parsers/cli/cli.h>
 #include <config/config.h>
+#include <parsers/cli/cli.h>
 
 CLI::CLI(int argc, char *argv[]) {
     argparse::ArgumentParser parser("CTL Model Checker", CMAKE_PROJECT_VERSION);

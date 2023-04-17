@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <utility>
 
-typedef const std::function<sylvan::Bdd(const sylvan::Bdd&)>& fp_func_t;
+using fp_func_t = const std::function<sylvan::Bdd (const sylvan::Bdd &)> &;
 
 sylvan::Bdd fp(fp_func_t f, sylvan::Bdd& Z) {
     while (std::exchange(Z, f(Z)) != Z);

@@ -1,13 +1,17 @@
 #include <fstream>
 #include <parsers/fsm/fsm.h>
 
+#define MIN_TABLESIZE (UINT32_C(1) << 16)
+#define MAX_TABLESIZE (UINT32_C(1) << 28)
+#define MIN_CHACHESIZE (UINT32_C(1) << 16)
+#define MAX_CHACHESIZE (UINT32_C(1) << 28)
 #define STATE_BITS (sizeof(state_t) * 8)
 
 uint64_t FSM::instances = 0;
 
 void FSM::init_sylvan() {
     lace_start(0, 0);
-    sylvan::sylvan_set_sizes(UINT64_C(1) << 16, UINT64_C(1) << 28, UINT64_C(1) << 16, UINT64_C(1) << 28);
+    sylvan::sylvan_set_sizes(MIN_TABLESIZE, MAX_TABLESIZE, MIN_CHACHESIZE, MAX_CHACHESIZE);
     sylvan::sylvan_init_package();
     sylvan::sylvan_init_bdd();
 }
@@ -96,11 +100,11 @@ FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(
     read_fsm(path);
 };
 
-sylvan::Bdd FSM::pre(sylvan::Bdd states) const {
+sylvan::Bdd FSM::pre(const sylvan::Bdd& states) const {
     return states.RelPrev(state_to_state, all_variables);
 }
 
-sylvan::Bdd FSM::img(sylvan::Bdd states) const {
+sylvan::Bdd FSM::img(const sylvan::Bdd& states) const {
     return states.RelNext(state_to_state, all_variables);
 }
 
@@ -112,15 +116,15 @@ sylvan::Bdd FSM::label_to_states(const std::string& label) const {
 }
 
 void FSM::print() const {
-    auto f = std::fopen("initial_states.txt", "w");
+    auto* f = std::fopen("initial_states.txt", "w");
     initial_state.PrintDot(f);
-    std::fclose(f);
+    (void)std::fclose(f);
     f = std::fopen("transition_relation.txt", "w");
     state_to_state.PrintDot(f);
-    std::fclose(f);
+    (void)std::fclose(f);
     f = std::fopen("label_relation.txt", "w");
     state_to_label.PrintDot(f);
-    std::fclose(f);
+    (void)std::fclose(f);
 }
 
 FSM::~FSM() {
