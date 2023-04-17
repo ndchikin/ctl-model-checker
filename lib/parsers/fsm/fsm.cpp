@@ -1,5 +1,6 @@
-#include <fstream>
 #include <parsers/fsm/fsm.h>
+
+#include <fstream>
 
 #define MIN_TABLESIZE (UINT32_C(1) << 16)
 #define MAX_TABLESIZE (UINT32_C(1) << 28)

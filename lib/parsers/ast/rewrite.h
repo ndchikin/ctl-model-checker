@@ -2,6 +2,7 @@
 
 #include <parsers/ast/common.h>
 #include <parsers/ast/grammar.h>
+
 #include <tao/pegtl/contrib/parse_tree.hpp>
 
 std::unique_ptr<node_t> copy(const std::unique_ptr<node_t>& n);
@@ -44,27 +45,27 @@ struct Selector : parse_tree::selector<
     >
 > {};
 
-template<>
+template <>
 struct Selector<AX> : std::true_type {
     static void transform(std::unique_ptr<node_t>& n);
 };
 
-template<>
+template <>
 struct Selector<AF> : std::true_type {
     static void transform(std::unique_ptr<node_t>& n);
 };
 
-template<>
+template <>
 struct Selector<EF> : std::true_type {
     static void transform(std::unique_ptr<node_t>& n);
 };
 
-template<>
+template <>
 struct Selector<AG> : std::true_type {
     static void transform(std::unique_ptr<node_t>& n);
 };
 
-template<>
+template <>
 struct Selector<AU> : std::true_type {
     static void transform(std::unique_ptr<node_t>& n);
 };

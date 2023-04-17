@@ -1,10 +1,11 @@
 #include <checker/checker.h>
-#include <fstream>
 #include <parsers/ast/grammar.h>
+
+#include <fstream>
 #include <stdexcept>
 #include <utility>
 
-using fp_func_t = const std::function<sylvan::Bdd (const sylvan::Bdd &)> &;
+using fp_func_t = const std::function<sylvan::Bdd(const sylvan::Bdd&)>&;
 
 sylvan::Bdd fp(fp_func_t f, sylvan::Bdd& Z) {
     while (std::exchange(Z, f(Z)) != Z);
@@ -43,11 +44,11 @@ sylvan::Bdd compute_node(const std::unique_ptr<node_t>& n, const FSM& fsm) {
         return fsm.pre(compute_node(n->children.front(), fsm));
     } else if (n->is_type<EG>()) {
         const auto f = compute_node(n->children.front(), fsm);
-        return gfp([&f, &fsm](const auto& Z){ return f & fsm.pre(Z); });
+        return gfp([&f, &fsm](const auto& Z) { return f & fsm.pre(Z); });
     } else if (n->is_type<EU>()) {
         const auto g = compute_node(n->children.front(), fsm);
         const auto f = compute_node(n->children.back(), fsm);
-        return lfp([&g, &f, &fsm](const auto& Z){ return f | (g & fsm.pre(Z)); });
+        return lfp([&g, &f, &fsm](const auto& Z) { return f | (g & fsm.pre(Z)); });
     } else if (n->is_type<p0>()) {
         return fsm.initial_state;
     } else if (n->is_type<Eq>()) {
@@ -59,12 +60,12 @@ sylvan::Bdd compute_node(const std::unique_ptr<node_t>& n, const FSM& fsm) {
     } else if (n->is_type<FU>()) {
         const auto p = compute_node(n->children.front(), fsm);
         const auto q = compute_node(n->children.back(), fsm);
-        return lfp([&p, &q, &fsm](const auto& Z){ return p | fsm.img(Z & q); });
+        return lfp([&p, &q, &fsm](const auto& Z) { return p | fsm.img(Z & q); });
     } else if (n->is_type<FG>()) {
         const auto p = compute_node(n->children.front(), fsm);
         const auto q = compute_node(n->children.back(), fsm);
-        const auto tmp = lfp([&p, &q, &fsm](const auto& Z){ return p | fsm.img(Z & q); }) & q;
-        return gfp([&tmp, &fsm](const auto& Z){ return tmp & fsm.img(Z); });
+        const auto tmp = lfp([&p, &q, &fsm](const auto& Z) { return p | fsm.img(Z & q); }) & q;
+        return gfp([&tmp, &fsm](const auto& Z) { return tmp & fsm.img(Z); });
     } else {
         throw std::runtime_error("Don't know how to compute node with type: " + static_cast<std::string>(n->type));
     }

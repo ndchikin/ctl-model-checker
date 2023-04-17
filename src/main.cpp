@@ -1,7 +1,7 @@
-#include <parsers/cli/cli.h>
-#include <parsers/ast/ast.h>
-#include <parsers/fsm/fsm.h>
 #include <checker/checker.h>
+#include <parsers/ast/ast.h>
+#include <parsers/cli/cli.h>
+#include <parsers/fsm/fsm.h>
 
 int main(int argc, char *argv[]) {
     const CLI cli(argc, argv);
