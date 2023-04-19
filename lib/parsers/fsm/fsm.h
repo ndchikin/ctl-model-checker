@@ -9,7 +9,7 @@ using state_t = uint32_t;
 class FSM {
 private:
     sylvan::Bdd state_to_state;
-    sylvan::Bdd state_to_label;
+    sylvan::Bdd label_to_state;
 
     sylvan::BddSet state_variables;
     sylvan::BddSet relation_variables;

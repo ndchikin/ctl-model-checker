@@ -7,3 +7,6 @@
 [submodule "contrib/sylvan"]
 	path = contrib/sylvan
 	url = https://github.com/trolando/sylvan.git
+[submodule "contrib/googletest"]
+	path = contrib/googletest
+	url = https://github.com/google/googletest.git

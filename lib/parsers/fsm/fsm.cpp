@@ -87,8 +87,8 @@ void FSM::add_edge(state_t beg, state_t end) {
 }
 
 void FSM::add_label(state_t state, state_t label) {
-    encode(state, label);
-    state_to_label = state_to_label.UnionCube(relation_variables, values);
+    encode(label, state);
+    label_to_state = label_to_state.UnionCube(relation_variables, values);
 }
 
 FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
@@ -110,10 +110,9 @@ sylvan::Bdd FSM::img(const sylvan::Bdd& states) const {
 }
 
 sylvan::Bdd FSM::label_to_states(const std::string& label) const {
-    auto index = label_to_index.at(label);
-    encode(index);
+    encode(label_to_index.at(label));
     auto label_bdd = sylvan::Bdd::bddCube(state_variables, values);
-    return label_bdd.RelPrev(state_to_label, all_variables);
+    return label_bdd.RelNext(label_to_state, all_variables);
 }
 
 void FSM::print() const {
@@ -124,7 +123,7 @@ void FSM::print() const {
     state_to_state.PrintDot(f);
     (void)std::fclose(f);
     f = std::fopen("label_relation.txt", "w");
-    state_to_label.PrintDot(f);
+    label_to_state.PrintDot(f);
     (void)std::fclose(f);
 }
 
