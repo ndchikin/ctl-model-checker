@@ -9,6 +9,6 @@ int main(int argc, char *argv[]) {
     const CLI cli(argc, argv);
     const AST ast(cli.formula);
     const FSM fsm(cli.model);
-    std::cout << evaluate_formula(ast, fsm);
+    std::cout << evaluate_formula(ast, fsm) << std::endl;
     return 0;
 }
