@@ -165,3 +165,26 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 ## Next goal
 
 * Add tests and find all bugs, if any
+
+# 2023-04-25
+
+## Research
+
+* [googletest](https://github.com/google/googletest.git) - used for testing
+
+## Result
+
+* We have a working model checker
+* At the moment it doesn't partition the transition relation, but it works correctly
+* More than 20 tests to evaluate various CTL formulas against several different models
+* Found several bugs thanks to tests
+
+## Next goal
+
+* Implement partitioning for transition relation
+* Various performance comparisons
+
+## Who did what
+
+* Jing - Presentation and research
+* Nikolay - Programming
