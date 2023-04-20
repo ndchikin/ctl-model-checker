@@ -3,7 +3,7 @@
 
 #include <argparse/argparse.hpp>
 
-CLI::CLI(int argc, char* argv[]) {
+CLI::CLI(int argc, const char* const argv[]) {
     argparse::ArgumentParser parser("CTL Model Checker", CMAKE_PROJECT_VERSION);
 
     parser
