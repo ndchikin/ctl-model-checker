@@ -53,32 +53,32 @@ void replace_ex(node_ptr& n) {
     }
 }
 
-void replace_root(node_ptr& n) {
-    node_ptr comp;
+void rewrite_root(node_ptr& n) {
     auto eq = make_node<Eq>();
     auto p = make_node<p0>();
     auto and0 = make_node<And>();
     auto false0 = make_node<False>();
     auto f = std::move(n->children.front());
     if (f->is_type<Not>()) {
-        comp = std::move(eq);
         f = std::move(f->children.front());
+        add_child(and0, p);
+        add_child(and0, f);
+        add_child(eq, and0);
+        add_child(eq, false0);
+        n = std::move(eq);
     } else {
         auto not0 = make_node<Not>();
+        add_child(and0, p);
+        add_child(and0, f);
+        add_child(eq, and0);
+        add_child(eq, false0);
         add_child(not0, eq);
-        comp = std::move(not0);
+        n = std::move(not0);
     }
-    add_child(and0, p);
-    add_child(and0, f);
-    add_child(comp, and0);
-    add_child(comp, false0);
-    n = std::move(comp);
 }
 
 void rewrite_top(node_ptr& n) {
-    if (n->is_root()) {
-        replace_root(n);
-    } else if (n->is_type<And>()) {
+    if (n->is_type<And>()) {
         if (n->children.back()->is_type<EG>()) {
             replace_eg(n);
         } else if (n->children.back()->is_type<EU>()) {

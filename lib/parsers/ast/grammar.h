@@ -51,7 +51,7 @@ struct EU : seq<E, SFUFS> {};
 struct TOP : sor<AX, EX, AF, EF, AG, EG, AU, EU> {};
 
 struct P0 : sor<TOP, Boolean, Atom, Bracketed> {};
-struct P1 : seq<opt<Not>, P0> {};
+struct P1 : seq<star<Not>, P0> {};
 struct P2 : list<P1, And> {};
 struct P3 : list<P2, Or> {};
 struct P4 : list<P3, Imply> {};

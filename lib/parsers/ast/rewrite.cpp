@@ -76,11 +76,15 @@ void replace_iff(node_ptr& n) {
 void Rewrite::transform(node_ptr& n) {
     if (n->children.size() == 1) {
         fold(n);
-    } else if (n->children.size() == 2) {
-        auto o = std::move(n->children.front());
+    } else if (n->is_type<P1>()) {
         auto f = std::move(n->children.back());
-        add_child(o, f);
-        n = std::move(o);
+        if (n->children.size() % 2 == 0) {
+            auto not0 = make_node<Not>();
+            add_child(not0, f);
+            n = std::move(not0);
+        } else {
+            n = std::move(f);
+        }
     } else {
         auto f = std::move(n->children.back());
         n->children.pop_back();

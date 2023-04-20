@@ -1,24 +1,35 @@
 #include <parsers/fsm/fsm.h>
 
 #include <fstream>
+#include <sstream>
 
-#define MIN_TABLESIZE (UINT32_C(1) << 16)
-#define MAX_TABLESIZE (UINT32_C(1) << 28)
-#define MIN_CHACHESIZE (UINT32_C(1) << 16)
-#define MAX_CHACHESIZE (UINT32_C(1) << 28)
-#define STATE_BITS (sizeof(state_t) * 8)
+#define TABLE_RATIO (1)
+#define INITIAL_RATIO (8)
 
-uint64_t FSM::instances = 0;
-
-void FSM::init_sylvan() {
-    lace_start(0, 0);
-    sylvan::sylvan_set_sizes(MIN_TABLESIZE, MAX_TABLESIZE, MIN_CHACHESIZE, MAX_CHACHESIZE);
-    sylvan::sylvan_init_package();
-    sylvan::sylvan_init_bdd();
+size_t getMaxMemory() {
+    const auto pages = sysconf(_SC_PHYS_PAGES);
+    const auto page_size = sysconf(_SC_PAGE_SIZE);
+    return pages * page_size;
 }
 
-void FSM::free_sylvan() {
-    sylvan::sylvan_quit();
+uint64_t SylvanIniter::instances = 0;
+
+SylvanIniter::SylvanIniter() {
+    if (instances == 0) {
+        lace_start(0, 0);
+        sylvan::sylvan_set_limits(getMaxMemory(), TABLE_RATIO, INITIAL_RATIO);
+        sylvan::sylvan_init_package();
+        sylvan::sylvan_init_bdd();
+    }
+    ++instances;
+}
+
+SylvanIniter::~SylvanIniter() {
+    --instances;
+    if (instances == 0) {
+        sylvan::sylvan_quit();
+        lace_stop();
+    }
 }
 
 void FSM::init_vars() {
@@ -30,20 +41,24 @@ void FSM::init_vars() {
     }
 }
 
-void FSM::read_fsm(const std::string& path) {
+void FSM::init() {
+    init_vars();
+    set_initial_state();
+}
+
+void FSM::read_fsm(std::istream& input) {
     state_t n;
     state_t m;
     std::string s;
     std::string beg;
     std::string end;
-    std::fstream file(path, std::ios_base::in);
-    file >> n;
+    input >> n;
     for (size_t i = 0, l = 0; i < n; ++i) {
-        file >> s;
+        input >> s;
         state_to_index[s] = i;
-        file >> m;
+        input >> m;
         for (size_t j = 0; j < m; ++j) {
-            file >> s;
+            input >> s;
             auto it = label_to_index.try_emplace(s, l);
             if (it.second) {
                 ++l;
@@ -51,10 +66,10 @@ void FSM::read_fsm(const std::string& path) {
             add_label(i, it.first->second);
         }
     }
-    file >> n;
+    input >> n;
     for (size_t i = 0; i < n; ++i) {
-        file >> beg;
-        file >> end;
+        input >> beg;
+        input >> end;
         add_edge(state_to_index.at(beg), state_to_index.at(end));
     }
 }
@@ -92,13 +107,15 @@ void FSM::add_label(state_t state, state_t label) {
 }
 
 FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
-    if (instances == 0) {
-        init_sylvan();
-    }
-    ++instances;
-    init_vars();
-    set_initial_state();
-    read_fsm(path);
+    init();
+    std::fstream input(path, std::ios_base::in);
+    read_fsm(input);
+};
+
+FSM::FSM(const char* str) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
+    init();
+    std::stringstream input(str);
+    read_fsm(input);
 };
 
 sylvan::Bdd FSM::pre(const sylvan::Bdd& states) const {
@@ -110,9 +127,14 @@ sylvan::Bdd FSM::img(const sylvan::Bdd& states) const {
 }
 
 sylvan::Bdd FSM::label_to_states(const std::string& label) const {
-    encode(label_to_index.at(label));
-    auto label_bdd = sylvan::Bdd::bddCube(state_variables, values);
-    return label_bdd.RelNext(label_to_state, all_variables);
+    auto it = label_to_index.find(label);
+    if (it == label_to_index.end()) {
+        return sylvan::sylvan_false;
+    } else {
+        encode(it->second);
+        auto label_bdd = sylvan::Bdd::bddCube(state_variables, values);
+        return label_bdd.RelNext(label_to_state, all_variables);
+    }
 }
 
 void FSM::print() const {
@@ -126,10 +148,3 @@ void FSM::print() const {
     label_to_state.PrintDot(f);
     (void)std::fclose(f);
 }
-
-FSM::~FSM() {
-    --instances;
-    if (instances == 0) {
-        free_sylvan();
-    }
-};

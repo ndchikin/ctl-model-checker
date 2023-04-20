@@ -2,12 +2,20 @@
 #include <gtest/gtest.h>
 #include <parsers/ast/ast.h>
 #include <parsers/ast/common.h>
-#include <parsers/ast/rewrite.h>
 #include <parsers/ast/grammar.h>
+#include <parsers/ast/rewrite.h>
+#include <parsers/ast/visitors.h>
 
 #include <string>
 
-using namespace std::literals::string_literals;
+template <typename T>
+node_ptr make_node(const char* str) {
+    auto node = std::make_unique<node_t>();
+    node->set_type<T>();
+    node->m_begin.data = str;
+    node->m_end.data = str + std::strlen(str);
+    return node;
+}
 
 bool compare_node(const node_ptr& n1, const node_ptr& n2) {
     if (n1->type == n2->type) {
@@ -25,45 +33,79 @@ bool compare_ast(const node_ptr& n1, const node_ptr& n2) {
         return false;
     }
     for (size_t i = 0; i < n1->children.size(); ++i) {
-        if (!compare_node(n1->children[i], n2->children[i])) {
+        if (!compare_ast(n1->children[i], n2->children[i])) {
             return false;
         }
     }
     return true;
 }
 
-void set_content(node_ptr& n, const std::string& c) {
-    n->m_begin.data = c.c_str();
-    n->m_end.data = c.c_str() + c.size();
+TEST(AST, DoubleNot) {
+    AST ast("¬¬f");
+    auto f = make_node<Atom>("f");
+    auto p = make_node<p0>();
+    auto and0 = make_node<And>();
+    auto not0 = make_node<Not>();
+    auto eq = make_node<Eq>();
+    auto false0 = make_node<False>();
+    add_child(and0, p);
+    add_child(and0, f);
+    add_child(eq, and0);
+    add_child(eq, false0);
+    add_child(not0, eq);
+    auto ast_target = std::move(not0);
+    EXPECT_TRUE(compare_ast(ast.root, ast_target));
 }
 
-// struct Not : utf8::one<U'¬'> {};
-// struct And : pad<utf8::one<U'∧'>, Space> {};
-// struct Or : pad<utf8::one<U'∨'>, Space> {};
-// struct Imply : pad<utf8::one<U'⇒'>, Space> {};
-// struct IFF : pad<utf8::one<U'⇔'>, Space> {};
+TEST(AST, Example) {
+    AST ast("E[q U ¬AX(f)]");
+    auto q = make_node<Atom>("q");
+    auto f = make_node<Atom>("f");
+    auto p = make_node<p0>();
+    auto img = make_node<Img>();
+    auto fu = make_node<FU>();
+    auto and0 = make_node<And>();
+    auto not0 = make_node<Not>();
+    auto not1 = make_node<Not>();
+    auto eq = make_node<Eq>();
+    auto false0 = make_node<False>();
+    add_child(fu, p);
+    add_child(fu, q);
+    add_child(img, fu);
+    add_child(not0, f);
+    add_child(and0, img);
+    add_child(and0, not0);
+    add_child(eq, and0);
+    add_child(eq, false0);
+    add_child(not1, eq);
+    auto ast_target = std::move(not1);
+    EXPECT_TRUE(compare_ast(ast.root, ast_target));
+}
 
-// struct AX : seq<A, X, P0> {};
-// struct AF : seq<A, F, P0> {};
-// struct EF : seq<E, F, P0> {};
-// struct AG : seq<A, G, P0> {};
-// struct AU : seq<A, SFUFS> {};
-
-// struct p0;
-// struct Eq;
-// struct Img;
-// struct FU;
-// struct FG;
-
-
-TEST(AST, DoubleNot) {
-    memory_input input_source("¬¬f", "");
-    const auto ast_source = parse_tree::parse<Grammar, node_t, Selector>(input_source);
-    std::string s_f("f");
-    auto f = make_node<Atom>();
-    set_content(f, s_f);
-    const auto ast_target = make_node<p0>();
-    ast_target->type = "";
-    ast_target->children.push_back(std::move(f));
+TEST(AST, ExampleFromPaper) {
+    memory_input input_source("AG(req ⇒ AFack)", "");
+    auto ast_source = parse_tree::parse<Grammar, node_t, Selector>(input_source);
+    rewrite_root(ast_source);
+    rewrite_top(ast_source);
+    auto p = make_node<p0>();
+    auto req = make_node<Atom>("req");
+    auto ack = make_node<Atom>("ack");
+    auto fg = make_node<FG>();
+    auto fu = make_node<FU>();
+    auto true0 = make_node<True>();
+    auto false0 = make_node<False>();
+    auto and0 = make_node<And>();
+    auto not0 = make_node<Not>();
+    auto eq = make_node<Eq>();
+    add_child(fu, p);
+    add_child(fu, true0);
+    add_child(and0, fu);
+    add_child(and0, req);
+    add_child(not0, ack);
+    add_child(fg, and0);
+    add_child(fg, not0);
+    add_child(eq, fg);
+    add_child(eq, false0);
+    auto ast_target = std::move(eq);
     EXPECT_TRUE(compare_ast(ast_source, ast_target));
 }
