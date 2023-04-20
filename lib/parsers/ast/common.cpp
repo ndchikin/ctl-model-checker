@@ -1,7 +1,7 @@
 #include <parsers/ast/common.h>
 #include <parsers/ast/grammar.h>
 
-int type_prior(const std::unique_ptr<node_t>& n) {
+int type_prior(const node_ptr& n) {
     if (n->is_type<EG>()) {
         return 3;
     } else if (n->is_type<EU>()) {
@@ -13,7 +13,7 @@ int type_prior(const std::unique_ptr<node_t>& n) {
     }
 }
 
-void add_child(std::unique_ptr<node_t>& n, std::unique_ptr<node_t>& child) {
+void add_child(node_ptr& n, node_ptr& child) {
     if (n->is_type<Not>() && child->is_type<Not>()) {
         n = std::move(child->children.front());
     } else if (n->is_type<And>() && child->is_type<And>()) {
@@ -23,7 +23,7 @@ void add_child(std::unique_ptr<node_t>& n, std::unique_ptr<node_t>& child) {
         std::sort(
             n->children.begin(),
             n->children.end(),
-            [](const std::unique_ptr<node_t>& n0, const std::unique_ptr<node_t>& n1) {
+            [](const node_ptr& n0, const node_ptr& n1) {
                 return type_prior(n0) < type_prior(n1);
             }
         );

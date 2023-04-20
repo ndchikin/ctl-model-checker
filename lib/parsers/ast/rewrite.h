@@ -5,16 +5,15 @@
 
 #include <tao/pegtl/contrib/parse_tree.hpp>
 
-std::unique_ptr<node_t> copy(const std::unique_ptr<node_t>& n);
-std::unique_ptr<node_t> deep_copy(const std::unique_ptr<node_t>& n);
-void fold(std::unique_ptr<node_t>& n);
-void replace_not(std::unique_ptr<node_t>& n);
-void replace_or(std::unique_ptr<node_t>& n);
-void replace_imply(std::unique_ptr<node_t>& n);
-void replace_iff(std::unique_ptr<node_t>& n);
+node_ptr copy(const node_ptr& n);
+node_ptr deep_copy(const node_ptr& n);
+void fold(node_ptr& n);
+void replace_or(node_ptr& n);
+void replace_imply(node_ptr& n);
+void replace_iff(node_ptr& n);
 
 struct Rewrite : parse_tree::apply<Rewrite> {
-    static void transform(std::unique_ptr<node_t>& n);
+    static void transform(node_ptr& n);
 };
 
 template<typename Rule>
@@ -47,25 +46,25 @@ struct Selector : parse_tree::selector<
 
 template <>
 struct Selector<AX> : std::true_type {
-    static void transform(std::unique_ptr<node_t>& n);
+    static void transform(node_ptr& n);
 };
 
 template <>
 struct Selector<AF> : std::true_type {
-    static void transform(std::unique_ptr<node_t>& n);
+    static void transform(node_ptr& n);
 };
 
 template <>
 struct Selector<EF> : std::true_type {
-    static void transform(std::unique_ptr<node_t>& n);
+    static void transform(node_ptr& n);
 };
 
 template <>
 struct Selector<AG> : std::true_type {
-    static void transform(std::unique_ptr<node_t>& n);
+    static void transform(node_ptr& n);
 };
 
 template <>
 struct Selector<AU> : std::true_type {
-    static void transform(std::unique_ptr<node_t>& n);
+    static void transform(node_ptr& n);
 };

@@ -1,6 +1,6 @@
 #include <parsers/ast/rewrite.h>
 
-std::unique_ptr<node_t> copy(const std::unique_ptr<node_t>& n) {
+node_ptr copy(const node_ptr& n) {
     auto node = std::make_unique<node_t>();
     node->type = n->type;
     node->m_begin = n->m_begin;
@@ -8,7 +8,7 @@ std::unique_ptr<node_t> copy(const std::unique_ptr<node_t>& n) {
     return node;
 }
 
-std::unique_ptr<node_t> deep_copy(const std::unique_ptr<node_t>& n) {
+node_ptr deep_copy(const node_ptr& n) {
     auto node = copy(n);
     for (const auto& child : n->children) {
         node->children.push_back(deep_copy(child));
@@ -16,17 +16,11 @@ std::unique_ptr<node_t> deep_copy(const std::unique_ptr<node_t>& n) {
     return node;
 }
 
-void fold(std::unique_ptr<node_t>& n) {
+void fold(node_ptr& n) {
     n = std::move(n->children.front());
 }
 
-void replace_not(std::unique_ptr<node_t>& n) {
-    auto o = std::move(n->children.front());
-    add_child(o, n->children.back());
-    n = std::move(o);
-}
-
-void replace_or(std::unique_ptr<node_t>& n) {
+void replace_or(node_ptr& n) {
     auto and0 = make_node<And>();
     auto not0 = make_node<Not>();
     auto not1 = make_node<Not>();
@@ -41,7 +35,7 @@ void replace_or(std::unique_ptr<node_t>& n) {
     n = std::move(not0);
 }
 
-void replace_imply(std::unique_ptr<node_t>& n) {
+void replace_imply(node_ptr& n) {
     auto not0 = make_node<Not>();
     auto not1 = make_node<Not>();
     auto and0 = make_node<And>();
@@ -54,7 +48,7 @@ void replace_imply(std::unique_ptr<node_t>& n) {
     n = std::move(not0);
 }
 
-void replace_iff(std::unique_ptr<node_t>& n) {
+void replace_iff(node_ptr& n) {
     auto and0 = make_node<And>();
     auto and1 = make_node<And>();
     auto and2 = make_node<And>();
@@ -79,7 +73,7 @@ void replace_iff(std::unique_ptr<node_t>& n) {
     n = std::move(and0);
 }
 
-void Rewrite::transform(std::unique_ptr<node_t>& n) {
+void Rewrite::transform(node_ptr& n) {
     if (n->children.size() == 1) {
         fold(n);
     } else if (n->children.size() == 2) {
@@ -106,7 +100,7 @@ void Rewrite::transform(std::unique_ptr<node_t>& n) {
     }
 }
 
-void Selector<AX>::transform(std::unique_ptr<node_t>& n) {
+void Selector<AX>::transform(node_ptr& n) {
     auto not0 = make_node<Not>();
     auto not1 = make_node<Not>();
     auto ex = make_node<EX>();
@@ -117,7 +111,7 @@ void Selector<AX>::transform(std::unique_ptr<node_t>& n) {
     n = std::move(not0);
 }
 
-void Selector<AF>::transform(std::unique_ptr<node_t>& n) {
+void Selector<AF>::transform(node_ptr& n) {
     auto not0 = make_node<Not>();
     auto not1 = make_node<Not>();
     auto eg = make_node<EG>();
@@ -128,7 +122,7 @@ void Selector<AF>::transform(std::unique_ptr<node_t>& n) {
     n = std::move(not0);
 }
 
-void Selector<EF>::transform(std::unique_ptr<node_t>& n) {
+void Selector<EF>::transform(node_ptr& n) {
     auto true0 = make_node<True>();
     auto eu = make_node<EU>();
     auto f = std::move(n->children.front());
@@ -137,7 +131,7 @@ void Selector<EF>::transform(std::unique_ptr<node_t>& n) {
     n = std::move(eu);
 }
 
-void Selector<AG>::transform(std::unique_ptr<node_t>& n) {
+void Selector<AG>::transform(node_ptr& n) {
     auto true0 = make_node<True>();
     auto not0 = make_node<Not>();
     auto not1 = make_node<Not>();
@@ -150,7 +144,7 @@ void Selector<AG>::transform(std::unique_ptr<node_t>& n) {
     n = std::move(not0);
 }
 
-void Selector<AU>::transform(std::unique_ptr<node_t>& n) {
+void Selector<AU>::transform(node_ptr& n) {
     auto or0 = make_node<Or>();
     auto and0 = make_node<And>();
     auto not0 = make_node<Not>();

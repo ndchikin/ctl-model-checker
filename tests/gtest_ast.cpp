@@ -1,9 +1,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <parsers/ast/ast.h>
+#include <parsers/ast/common.h>
+#include <parsers/ast/rewrite.h>
 #include <parsers/ast/grammar.h>
-#include <parsers/ast/selector.h>
-#include <parsers/ast/visitors.h>
 
 #include <string>
 
