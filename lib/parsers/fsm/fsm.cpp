@@ -6,7 +6,7 @@
 #define TABLE_RATIO (1)
 #define INITIAL_RATIO (10)
 
-size_t getMaxMemory() {
+size_t get_max_memory() {
     const auto pages = sysconf(_SC_PHYS_PAGES);
     const auto page_size = sysconf(_SC_PAGE_SIZE);
     return pages * page_size;
@@ -17,7 +17,7 @@ uint64_t SylvanIniter::instances = 0;
 SylvanIniter::SylvanIniter() {
     if (instances == 0) {
         lace_start(0, 0);
-        sylvan::sylvan_set_limits(getMaxMemory(), TABLE_RATIO, INITIAL_RATIO);
+        sylvan::sylvan_set_limits(get_max_memory(), TABLE_RATIO, INITIAL_RATIO);
         sylvan::sylvan_init_package();
         sylvan::sylvan_init_bdd();
     }
