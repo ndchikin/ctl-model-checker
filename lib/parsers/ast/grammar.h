@@ -11,7 +11,7 @@ struct Boolean : sor<True, False> {};
 
 struct Atom : identifier {};
 
-template<typename T>
+template <typename T>
 using pad_s = pad<T, space>;
 
 struct Not : utf8::one<U'¬'> {};
