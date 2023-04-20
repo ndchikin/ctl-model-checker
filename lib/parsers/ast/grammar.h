@@ -11,12 +11,14 @@ struct Boolean : sor<True, False> {};
 
 struct Atom : identifier {};
 
-struct Space : utf8::one<' '> {};
+template<typename T>
+using pad_s = pad<T, space>;
+
 struct Not : utf8::one<U'¬'> {};
-struct And : pad<utf8::one<U'∧'>, Space> {};
-struct Or : pad<utf8::one<U'∨'>, Space> {};
-struct Imply : pad<utf8::one<U'⇒'>, Space> {};
-struct IFF : pad<utf8::one<U'⇔'>, Space> {};
+struct And : pad_s<utf8::one<U'∧'>> {};
+struct Or : pad_s<utf8::one<U'∨'>> {};
+struct Imply : pad_s<utf8::one<U'⇒'>> {};
+struct IFF : pad_s<utf8::one<U'⇔'>> {};
 
 struct RBL : utf8::one<'('> {};
 struct RBR : utf8::one<')'> {};
@@ -42,7 +44,7 @@ struct EF : seq<E, F, P0> {};
 struct AG : seq<A, G, P0> {};
 struct EG : seq<E, G, P0> {};
 
-struct PU : pad<U, Space> {};
+struct PU : pad_s<U> {};
 struct SFUFS : seq<SBL, P5, PU, P5, SBR> {};
 
 struct AU : seq<A, SFUFS> {};
@@ -57,7 +59,7 @@ struct P3 : list<P2, Or> {};
 struct P4 : list<P3, Imply> {};
 struct P5 : list<P4, IFF> {};
 
-struct Grammar : must<P5, eof> {};
+struct Grammar : must<P5, opt<eol>, eof> {};
 
 struct p0;
 struct Eq;

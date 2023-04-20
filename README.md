@@ -29,3 +29,6 @@ cmake --build . && cmake --install .
 ```bash
 ./../programs/CTL-model-checker --help
 ```
+
+## Example run
+In folder [example](example) there is result of executing [run.sh](example/run.sh) command.

@@ -16,11 +16,6 @@ CLI::CLI(int argc, const char* const argv[]) {
         .help("file path to file with FSM model")
         .required();
 
-    parser
-        .add_argument("-o", "--output-states")
-        .help("file path to output file")
-        .required();
-
     try {
         parser.parse_args(argc, argv);
     } catch (const std::runtime_error& err) {
@@ -31,5 +26,4 @@ CLI::CLI(int argc, const char* const argv[]) {
 
     formula = parser.get("-c");
     model = parser.get("-f");
-    output = parser.get("-o");
 }

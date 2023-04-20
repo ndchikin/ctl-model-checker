@@ -1,0 +1,1 @@
+A[end2 U req2 ∨ idle2]

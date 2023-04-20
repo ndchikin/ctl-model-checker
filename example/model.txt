@@ -1,0 +1,24 @@
+8
+S0 4 end1 end2 idle1 idle2
+S1 3 req1 end2 idle2
+S2 3 req2 end1 idle1
+S3 2 req2 req1
+S4 2 cs1 idle2
+S5 2 cs2 idle1
+S6 2 cs1 req2
+S7 2 cs2 req1
+14
+S0 S1
+S0 S2
+S1 S3
+S1 S4
+S2 S3
+S2 S5
+S3 S6
+S3 S7
+S4 S0
+S4 S6
+S5 S0
+S5 S7
+S6 S2
+S7 S1

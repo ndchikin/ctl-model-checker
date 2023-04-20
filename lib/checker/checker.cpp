@@ -71,12 +71,6 @@ sylvan::Bdd compute_node(const node_ptr& n, const FSM& fsm) {
     }
 }
 
-void evaluate_formula(const AST& ast, const FSM& fsm, const std::string& path) {
-    auto bdd = compute_node(ast.root, fsm);
-    std::fstream file(path, std::ios_base::out);
-    file << bdd.isOne();
-}
-
 bool evaluate_formula(const AST& ast, const FSM& fsm) {
     auto bdd = compute_node(ast.root, fsm);
     return bdd.isOne();
