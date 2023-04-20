@@ -4,7 +4,7 @@
 #include <sstream>
 
 #define TABLE_RATIO (1)
-#define INITIAL_RATIO (8)
+#define INITIAL_RATIO (10)
 
 size_t getMaxMemory() {
     const auto pages = sysconf(_SC_PHYS_PAGES);
