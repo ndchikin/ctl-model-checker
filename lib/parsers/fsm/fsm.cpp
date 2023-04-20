@@ -136,15 +136,3 @@ sylvan::Bdd FSM::label_to_states(const std::string& label) const {
         return label_bdd.RelNext(label_to_state, all_variables);
     }
 }
-
-void FSM::print() const {
-    auto* f = std::fopen("initial_states.txt", "w");
-    initial_state.PrintDot(f);
-    (void)std::fclose(f);
-    f = std::fopen("transition_relation.txt", "w");
-    state_to_state.PrintDot(f);
-    (void)std::fclose(f);
-    f = std::fopen("label_relation.txt", "w");
-    label_to_state.PrintDot(f);
-    (void)std::fclose(f);
-}

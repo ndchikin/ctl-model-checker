@@ -53,8 +53,7 @@ TEST(AST, DoubleNot) {
     add_child(eq, and0);
     add_child(eq, false0);
     add_child(not0, eq);
-    auto ast_target = std::move(not0);
-    EXPECT_TRUE(compare_ast(ast.root, ast_target));
+    EXPECT_TRUE(compare_ast(ast.root, not0));
 }
 
 TEST(AST, Example) {
@@ -78,15 +77,11 @@ TEST(AST, Example) {
     add_child(eq, and0);
     add_child(eq, false0);
     add_child(not1, eq);
-    auto ast_target = std::move(not1);
-    EXPECT_TRUE(compare_ast(ast.root, ast_target));
+    EXPECT_TRUE(compare_ast(ast.root, not1));
 }
 
 TEST(AST, ExampleFromPaper) {
-    memory_input input_source("AG(req ⇒ AFack)", "");
-    auto ast_source = parse_tree::parse<Grammar, node_t, Selector>(input_source);
-    rewrite_root(ast_source);
-    rewrite_top(ast_source);
+    AST ast("AG(req ⇒ AFack)");
     auto p = make_node<p0>();
     auto req = make_node<Atom>("req");
     auto ack = make_node<Atom>("ack");
@@ -106,6 +101,5 @@ TEST(AST, ExampleFromPaper) {
     add_child(fg, not0);
     add_child(eq, fg);
     add_child(eq, false0);
-    auto ast_target = std::move(eq);
-    EXPECT_TRUE(compare_ast(ast_source, ast_target));
+    EXPECT_TRUE(compare_ast(ast.root, eq));
 }

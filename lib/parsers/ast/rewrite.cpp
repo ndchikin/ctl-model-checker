@@ -149,30 +149,32 @@ void Selector<AG>::transform(node_ptr& n) {
 }
 
 void Selector<AU>::transform(node_ptr& n) {
-    auto or0 = make_node<Or>();
     auto and0 = make_node<And>();
+    auto and1 = make_node<And>();
     auto not0 = make_node<Not>();
     auto not1 = make_node<Not>();
     auto not2 = make_node<Not>();
     auto not3 = make_node<Not>();
     auto not4 = make_node<Not>();
+    auto not5 = make_node<Not>();
     auto eu = make_node<EU>();
     auto eg = make_node<EG>();
     auto g = std::move(n->children.front());
     auto f0 = std::move(n->children.back());
     auto f1 = deep_copy(f0);
     auto f2 = deep_copy(f0);
-    add_child(not4, f2);
-    add_child(eg, not4);
-    add_child(not3, g);
-    add_child(not2, f1);
-    add_child(and0, not3);
-    add_child(and0, not2);
-    add_child(not1, f0);
-    add_child(eu, not1);
-    add_child(eu, and0);
-    add_child(or0, eu);
-    add_child(or0, eg);
-    add_child(not0, or0);
-    n = std::move(not0);
+    add_child(not5, f2);
+    add_child(eg, not5);
+    add_child(not4, g);
+    add_child(not3, f1);
+    add_child(and1, not4);
+    add_child(and1, not3);
+    add_child(not2, f0);
+    add_child(eu, not2);
+    add_child(eu, and1);
+    add_child(not1, eu);
+    add_child(not0, eg);
+    add_child(and0, not1);
+    add_child(and0, not0);
+    n = std::move(and0);
 }

@@ -52,5 +52,4 @@ public:
     sylvan::Bdd pre(const sylvan::Bdd& states) const;
     sylvan::Bdd img(const sylvan::Bdd& states) const;
     sylvan::Bdd label_to_states(const std::string& label) const;
-    void print() const;
 };
