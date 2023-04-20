@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
+enable_testing()
+
 add_subdirectory(contrib)
 add_subdirectory(lib)
 add_subdirectory(src)

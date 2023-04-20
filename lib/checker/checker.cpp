@@ -22,7 +22,7 @@ sylvan::Bdd gfp(fp_func_t f) {
     return fp(f, Z);
 }
 
-sylvan::Bdd compute_node(const std::unique_ptr<node_t>& n, const FSM& fsm) {
+sylvan::Bdd compute_node(const node_ptr& n, const FSM& fsm) {
     if (n->is_type<True>()) {
         return sylvan::sylvan_true;
     } else if (n->is_type<False>()) {

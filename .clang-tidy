@@ -3,6 +3,7 @@ Checks: '
     bugprone-*
 
     cert-*
+    -cert-err58-cpp
 
     clang-analyzer-*
 
