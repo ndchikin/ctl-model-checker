@@ -188,3 +188,18 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 
 * Jing - Presentation and research
 * Nikolay - Programming
+
+# 2023-05-02
+
+## Research
+
+* Theory understanding
+
+## Result
+
+* No new code, just brin work
+
+## Next goal
+
+* Add human readable test (human friendly, understandable model and properties to check)
+* Implement partitioning for transition relation
