@@ -1,5 +1,4 @@
 #include <checker/checker.h>
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <parsers/ast/ast.h>
 #include <parsers/fsm/fsm.h>

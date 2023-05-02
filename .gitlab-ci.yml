@@ -1,0 +1,29 @@
+image: registry.gitlab.unige.ch/nikolay.chikin/ctl-model-checker:latest
+
+stages:
+  - build
+  - test
+  - upload
+
+build:
+  stage: build
+  script:
+    - mkdir build && cd build
+    - export CXX=clang++-15
+    - cmake -DCMAKE_BUILD_TYPE=Release ..
+    - cmake --build . && cmake --install .
+  artifacts:
+    paths:
+      - build/
+      - programs/
+
+test:
+  stage: test
+  script:
+    - cd build
+    - ctest -VV
+
+upload:
+  stage: upload
+  script:
+    - curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file programs/ctl-model-checker "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ctl-model-checker/0.0.1/ctl-model-checker"
