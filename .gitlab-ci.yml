@@ -1,16 +1,36 @@
-image: registry.gitlab.unige.ch/nikolay.chikin/ctl-model-checker:latest
-
 stages:
+  - docker
   - build
   - test
   - upload
+
+variables:
+  DOCKER_IMAGE: docker:23
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE:latest
+  GIT_SUBMODULE_STRATEGY: recursive
+
+image: $CONTAINER_IMAGE
+
+docker:
+  image: $DOCKER_IMAGE
+  stage: docker
+  services:
+    - $DOCKER_IMAGE
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build --cache-to type=inline --cache-from $CONTAINER_IMAGE -t $CONTAINER_IMAGE .
+    - docker push $CONTAINER_IMAGE
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - Dockerfile
 
 build:
   stage: build
   script:
     - mkdir build && cd build
-    - export CXX=clang++-15
-    - cmake -DCMAKE_BUILD_TYPE=Release ..
+    - export CC=clang-15 CXX=clang++-15
+    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cmake --install .
   artifacts:
     paths:
@@ -26,4 +46,5 @@ test:
 upload:
   stage: upload
   script:
-    - curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file programs/ctl-model-checker "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ctl-model-checker/0.0.1/ctl-model-checker"
+    - FILE_PATH=$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/ctl-model-checker/0.1/ctl-model-checker
+    - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file programs/ctl-model-checker $FILE_PATH'

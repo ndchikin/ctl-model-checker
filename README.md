@@ -8,7 +8,7 @@ Tested on Ubuntu 22.04.1 LTS.
 ### Install required packages
 ```bash
 sudo apt-get update
-sudo apt-get install git clang-15 cmake
+sudo apt-get install git clang-15 cmake ninja-build
 ```
 
 ### Clone repository
@@ -20,8 +20,8 @@ git clone --recursive git@gitlab.unige.ch:Nikolay.Chikin/ctl-model-checker.git
 ```bash
 cd ctl-model-checker
 mkdir build && cd build
-export CXX=clang++-15
-cmake -DCMAKE_BUILD_TYPE=Release ..
+export CC=clang-15 CXX=clang++-15
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . && cmake --install .
 ```
 
