@@ -11,13 +11,13 @@ using memory_input_ptr = std::unique_ptr<tao::pegtl::memory_input<>>;
 
 class AST {
 private:
-    void build_ast();
+    void build_ast(bool use_bst);
 
 public:
     node_ptr root;
     file_input_ptr file;
     memory_input_ptr memory;
 
-    explicit AST(const std::string& path);
-    explicit AST(const char* str);
+    explicit AST(const std::string& path, bool use_bst = false);
+    explicit AST(const char* str, bool use_bst = false);
 };

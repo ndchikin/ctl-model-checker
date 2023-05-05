@@ -6,7 +6,7 @@
 using var_t = uint32_t;
 using state_t = uint32_t;
 
-#define STATE_BITS (sizeof(state_t) * 8)
+void sylvan_stats(const std::string& path);
 
 class SylvanIniter {
 private:

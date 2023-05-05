@@ -2,14 +2,24 @@
 
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
 #define TABLE_RATIO (1)
 #define INITIAL_RATIO (10)
+#define STATE_BITS (sizeof(state_t) * CHAR_BIT)
 
 size_t get_max_memory() {
     const auto pages = sysconf(_SC_PHYS_PAGES);
     const auto page_size = sysconf(_SC_PAGE_SIZE);
     return pages * page_size;
+}
+
+void sylvan_stats(const std::string& path) {
+    auto* file = fopen(path.c_str() , "w");
+    if (file == nullptr) {
+        throw std::runtime_error("Error opening file");
+    }
+    sylvan::sylvan_stats_report(file);
 }
 
 uint64_t SylvanIniter::instances = 0;
@@ -109,14 +119,17 @@ void FSM::add_label(state_t state, state_t label) {
 FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
     init();
     std::fstream input(path, std::ios_base::in);
+    if (!input) {
+        throw std::runtime_error("Error opening file");
+    }
     read_fsm(input);
-};
+}
 
 FSM::FSM(const char* str) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
     init();
     std::stringstream input(str);
     read_fsm(input);
-};
+}
 
 sylvan::Bdd FSM::pre(const sylvan::Bdd& states) const {
     return states.RelPrev(state_to_state, all_variables);
