@@ -23,8 +23,8 @@ CLI::CLI(int argc, const char* const argv[]) {
         .implicit_value(true);
 
     parser
-        .add_argument("--sylvan-stats")
-        .help("file path to file where to dump sylvan stats report");
+        .add_argument("--bdd-stats")
+        .help("file path to file where to dump BDD usage statistic");
 
     try {
         parser.parse_args(argc, argv);
@@ -37,5 +37,5 @@ CLI::CLI(int argc, const char* const argv[]) {
     formula = parser.get("-c");
     model = parser.get("-f");
     use_bst = parser.get<bool>("--use-bst");
-    sylvan_stats = parser.present("--sylvan-stats");
+    bdd_stats = parser.present("--bdd-stats");
 }

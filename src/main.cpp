@@ -10,8 +10,8 @@ int main(int argc, char* argv[]) {
     const AST ast(cli.formula, cli.use_bst);
     const FSM fsm(cli.model);
     std::cout << evaluate_formula(ast, fsm) << std::endl;
-    if (cli.sylvan_stats.has_value()) {
-        sylvan_stats(cli.sylvan_stats.value());
+    if (cli.bdd_stats.has_value()) {
+        sylvan_stats(cli.bdd_stats.value());
     }
     return 0;
 }

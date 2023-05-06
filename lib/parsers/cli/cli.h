@@ -7,7 +7,7 @@ struct CLI {
     std::string formula;
     std::string model;
     bool use_bst;
-    std::optional<std::string> sylvan_stats;
+    std::optional<std::string> bdd_stats;
 
     CLI(int argc, const char* const argv[]);
 };

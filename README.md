@@ -5,20 +5,24 @@
 The goal of this project is to implement CTL model checker using aproach introduced in the paper ([CTL Model Checking Based on Forward State Traversal](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.469.1817&rep=rep1&type=pdf)).
 
 ## How to run
+
 Tested on Ubuntu 22.04.1 LTS.
 
 ### Install required packages
+
 ```bash
 sudo apt-get update
 sudo apt-get install git clang-15 cmake ninja-build
 ```
 
 ### Clone repository
+
 ```bash
 git clone --recursive git@gitlab.unige.ch:Nikolay.Chikin/ctl-model-checker.git
 ```
 
 ### Build project
+
 ```bash
 cd ctl-model-checker
 mkdir build && cd build
@@ -28,9 +32,23 @@ cmake --build . && cmake --install .
 ```
 
 ### Run executable
+
 ```bash
 ./../programs/CTL-model-checker --help
 ```
 
+```text
+Usage: ctl-model-checker [--help] [--version] --ctl-formula VAR --fsm-model VAR [--use-bst] [--bdd-stats VAR]
+
+Optional arguments:
+  -h, --help            shows help message and exits
+  -v, --version         prints version information and exits
+  -c, --ctl-formula     file path to file with CTL formula [required]
+  -f, --fsm-model       file path to file with FSM model [required]
+  --use-bst             use backward state traversal, don't rewrites temporal operators using forward state traversal
+  --bdd-stats           file path to file where to dump BDD usage statistic
+```
+
 ## Example run
+
 In folder [example](example) there is result of executing [run.sh](example/run.sh) command.
