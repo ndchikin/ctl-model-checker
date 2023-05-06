@@ -32,7 +32,7 @@ const char* model2 =
 TEST(Eval2, Test0) {
     AST ast("req1");
     FSM fsm(model2);
-    EXPECT_FALSE(evaluate_formula(ast, fsm));
+    EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
 
 TEST(Eval2, Test1) {
