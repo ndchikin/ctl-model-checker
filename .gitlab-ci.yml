@@ -48,3 +48,5 @@ upload:
   script:
     - FILE_PATH=$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/ctl-model-checker/0.1/ctl-model-checker
     - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file programs/ctl-model-checker $FILE_PATH'
+  rules:
+    - when: manual
