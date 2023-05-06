@@ -23,12 +23,6 @@ CLI::CLI(int argc, const char* const argv[]) {
         .implicit_value(true);
 
     parser
-        .add_argument("--one-partition")
-        .help("don't partition transition relation")
-        .default_value(false)
-        .implicit_value(true);
-
-    parser
         .add_argument("--sylvan-stats")
         .help("file path to file where to dump sylvan stats report");
 
@@ -43,6 +37,5 @@ CLI::CLI(int argc, const char* const argv[]) {
     formula = parser.get("-c");
     model = parser.get("-f");
     use_bst = parser.get<bool>("--use-bst");
-    one_partition = parser.get<bool>("--one-partition");
     sylvan_stats = parser.present("--sylvan-stats");
 }

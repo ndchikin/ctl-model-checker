@@ -1,5 +1,7 @@
 # CTL Model Checker
 
+[![pipeline status](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/badges/main/pipeline.svg)](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/-/commits/main)
+
 The goal of this project is to implement CTL model checker using aproach introduced in the paper ([CTL Model Checking Based on Forward State Traversal](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.469.1817&rep=rep1&type=pdf)).
 
 ## How to run
