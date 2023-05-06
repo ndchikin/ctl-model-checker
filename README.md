@@ -52,3 +52,30 @@ Optional arguments:
 ## Example run
 
 In folder [example](example) there is result of executing [run.sh](example/run.sh) command.
+
+## Input formats
+
+### CTL formula
+
+[Syntax of CTL](https://en.wikipedia.org/wiki/Computation_tree_logic#Syntax_of_CTL)
+
+### FSM model
+
+In fact, the format of our FSM model is the same as that of the Kripke structure
+
+#### Specification of the FSM input format
+
+  1. Number of states n, the first state is the initial state
+  2. Next n lines: state, number of labels, list of labels
+  3. Number of edges m
+  4. Next m lines: state, state
+
+#### Example of FSM input format:
+
+      3
+      S0 2 begin start
+      S1 0
+      S2 1 finish
+      2
+      S0 S1
+      S1 S2
