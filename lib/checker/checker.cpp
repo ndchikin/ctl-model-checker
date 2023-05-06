@@ -50,7 +50,7 @@ sylvan::Bdd compute_node(const node_ptr& n, const FSM& fsm) {
         const auto f = compute_node(n->children.back(), fsm);
         return lfp([&g, &f, &fsm](const auto& Z) { return f | (g & fsm.pre(Z)); });
     } else if (n->is_type<p0>()) {
-        return fsm.initial_state;
+        return fsm.get_initial_state();
     } else if (n->is_type<Eq>()) {
         const auto states0 = compute_node(n->children.front(), fsm);
         const auto states1 = compute_node(n->children.back(), fsm);

@@ -1,6 +1,7 @@
 #include <parsers/fsm/fsm.h>
 
 #include <fstream>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 
@@ -42,7 +43,7 @@ SylvanIniter::~SylvanIniter() {
     }
 }
 
-void FSM::init_vars() {
+void FSMImplBase::init_vars() {
     for (var_t i = 0; i < values.size(); ++i) {
         if (i % 2 == 0) {
             state_variables.add(i);
@@ -51,12 +52,29 @@ void FSM::init_vars() {
     }
 }
 
-void FSM::init() {
-    init_vars();
-    set_initial_state();
+void FSMImplBase::set_initial_state() {
+    encode(0);
+    initial_state = sylvan::Bdd::bddCube(state_variables, values);
 }
 
-void FSM::read_fsm(std::istream& input) {
+void FSMImplBase::encode(state_t state) const {
+    uint8_t shift;
+    for (size_t i = 0; i < STATE_BITS; ++i) {
+        shift = STATE_BITS - 1 - i;
+        values[i] = (state >> shift) & 1;
+    }
+}
+
+void FSMImplBase::encode(state_t beg, state_t end) const {
+    uint8_t shift;
+    for (size_t i = 0; i < STATE_BITS; ++i) {
+        shift = STATE_BITS - 1 - i;
+        values[i * 2] = (beg >> shift) & 1;
+        values[i * 2 + 1] = (end >> shift) & 1;
+    }
+}
+
+void FSMImplBase::read_fsm(std::istream& input) {
     state_t n;
     state_t m;
     std::string s;
@@ -84,68 +102,110 @@ void FSM::read_fsm(std::istream& input) {
     }
 }
 
-void FSM::encode(state_t state) const {
-    uint8_t shift;
-    for (size_t i = 0; i < STATE_BITS; ++i) {
-        shift = STATE_BITS - 1 - i;
-        values[i] = (state >> shift) & 1;
+sylvan::Bdd FSMImplBase::label_to_bdd(const std::string& label) const {
+    auto it = label_to_index.find(label);
+    if (it == label_to_index.end()) {
+        return sylvan::sylvan_false;
     }
+    encode(it->second);
+    return sylvan::Bdd::bddCube(state_variables, values);
 }
 
-void FSM::encode(state_t beg, state_t end) const {
-    uint8_t shift;
-    for (size_t i = 0; i < STATE_BITS; ++i) {
-        shift = STATE_BITS - 1 - i;
-        values[i * 2] = (beg >> shift) & 1;
-        values[i * 2 + 1] = (end >> shift) & 1;
-    }
+sylvan::Bdd FSMImplBase::get_initial_state() const {
+    return initial_state;
 }
 
-void FSM::set_initial_state() {
-    encode(0);
-    initial_state = sylvan::Bdd::bddCube(state_variables, values);
+FSMImplBase::FSMImplBase() : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
+    init_vars();
+    set_initial_state();
 }
 
-void FSM::add_edge(state_t beg, state_t end) {
+void FSMImpl::add_edge(state_t beg, state_t end) {
     encode(beg, end);
     state_to_state = state_to_state.UnionCube(relation_variables, values);
 }
-
-void FSM::add_label(state_t state, state_t label) {
+void FSMImpl::add_label(state_t state, state_t label) {
     encode(label, state);
     label_to_state = label_to_state.UnionCube(relation_variables, values);
 }
 
-FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
-    init();
-    std::fstream input(path, std::ios_base::in);
-    if (!input) {
-        throw std::runtime_error("Error opening file");
-    }
+FSMImpl::FSMImpl(std::istream& input) {
     read_fsm(input);
-}
+};
 
-FSM::FSM(const char* str) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
-    init();
-    std::stringstream input(str);
-    read_fsm(input);
-}
-
-sylvan::Bdd FSM::pre(const sylvan::Bdd& states) const {
+sylvan::Bdd FSMImpl::pre(const sylvan::Bdd& states) const {
     return states.RelPrev(state_to_state, all_variables);
 }
 
-sylvan::Bdd FSM::img(const sylvan::Bdd& states) const {
+sylvan::Bdd FSMImpl::img(const sylvan::Bdd& states) const {
     return states.RelNext(state_to_state, all_variables);
 }
 
-sylvan::Bdd FSM::label_to_states(const std::string& label) const {
-    auto it = label_to_index.find(label);
-    if (it == label_to_index.end()) {
-        return sylvan::sylvan_false;
+sylvan::Bdd FSMImpl::label_to_states(const std::string& label) const {
+    auto label_bdd = label_to_bdd(label);
+    return label_bdd.RelNext(label_to_state, all_variables);
+}
+
+void PartitionedFSMImpl::add_edge(state_t beg, state_t end) {
+    encode(beg, end);
+    state_to_state = state_to_state.UnionCube(relation_variables, values);
+}
+
+void PartitionedFSMImpl::add_label(state_t state, state_t label) {
+    encode(label, state);
+    label_to_state = label_to_state.UnionCube(relation_variables, values);
+}
+
+PartitionedFSMImpl::PartitionedFSMImpl(std::istream& input) {
+    read_fsm(input);
+};
+
+sylvan::Bdd PartitionedFSMImpl::pre(const sylvan::Bdd& states) const {
+    return states.RelPrev(state_to_state, all_variables);
+}
+
+sylvan::Bdd PartitionedFSMImpl::img(const sylvan::Bdd& states) const {
+    return states.RelNext(state_to_state, all_variables);
+}
+
+sylvan::Bdd PartitionedFSMImpl::label_to_states(const std::string& label) const {
+    auto label_bdd = label_to_bdd(label);
+    return label_bdd.RelNext(label_to_state, all_variables);
+}
+
+void FSM::init_impl(std::istream& input, bool one_partition) {
+    if (one_partition) {
+        fsm_impl = std::make_unique<FSMImpl>(input);
     } else {
-        encode(it->second);
-        auto label_bdd = sylvan::Bdd::bddCube(state_variables, values);
-        return label_bdd.RelNext(label_to_state, all_variables);
+        fsm_impl = std::make_unique<PartitionedFSMImpl>(input);
     }
+}
+
+FSM::FSM(const std::string& path, bool one_partition) {
+    std::ifstream input(path);
+    if (!input) {
+        throw std::runtime_error("Error opening file");
+    }
+    init_impl(input, one_partition);
+}
+
+FSM::FSM(const char* str, bool one_partition) {
+    std::istringstream input(str);
+    init_impl(input, one_partition);
+}
+
+sylvan::Bdd FSM::get_initial_state() const {
+    return fsm_impl->get_initial_state();
+}
+
+sylvan::Bdd FSM::pre(const sylvan::Bdd& states) const {
+    return fsm_impl->pre(states);
+}
+
+sylvan::Bdd FSM::img(const sylvan::Bdd& states) const {
+    return fsm_impl->img(states);
+}
+
+sylvan::Bdd FSM::label_to_states(const std::string& label) const {
+    return fsm_impl->label_to_states(label);
 }
