@@ -109,7 +109,7 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
   1. Number of states n, the first state is the initial state
   2. Next n lines: state, number of labels, list of labels
   3. Number of edges m
-  4. Next n lines: state, state
+  4. Next m lines: state, state
 * Example of FSM input format:
 
       3
@@ -203,3 +203,23 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 
 * Add human readable test (human friendly, understandable model and properties to check)
 * Implement partitioning for transition relation
+
+# 2023-05-09
+
+## Research
+
+* GitLab CI/CD
+* Paper about transition relation partitioning: [Representing Circuits More Efficiently in Symbolic Model Checking](https://www.cs.cmu.edu/~emc/papers/Conference%20Papers/Representing%20Circuits%20More%20Efficiently%20in%20Symbolic%20Model%20Checking.pdf)
+
+## Result
+
+* Automated GitLab CI/CD pipeline for build, test and packaging tasks
+* Understanding the partitioning of the transition relationship
+* Understanding of the fact that in our case there is alwaus one partition and we have no use case or reason to implement partitioning
+* Preparation for performance testing (option to turn off forward state traversal and option to write BDD usage statistic)
+
+## Next goal
+
+* Add a human-readable test (human-friendly, understandable model and properties to check)
+* Perhaps rethink model format to make partitioning actually usable
+* Performance tests
