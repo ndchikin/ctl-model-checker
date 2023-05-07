@@ -70,7 +70,7 @@ In fact, the format of our FSM model is the same as that of the Kripke structure
   3. Number of edges m
   4. Next m lines: state, state
 
-#### Example of FSM input format:
+#### Example of FSM input format
 
       3
       S0 2 begin start
