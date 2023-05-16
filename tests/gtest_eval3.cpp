@@ -36,15 +36,9 @@ TEST(Eval3, Test3) {
     AST ast("AG(close ∨ off)");
     FSM fsm(model3);
     EXPECT_TRUE(evaluate_formula(ast, fsm));
-}
+}}
 
 TEST(Eval3, Test4) {
-    AST ast("AG(close ∨ off)");
-    FSM fsm(model3);
-    EXPECT_TRUE(evaluate_formula(ast, fsm));
-}
-
-TEST(Eval3, Test5) {
     AST ast("EF(open ∧ on)");
     FSM fsm(model3);
     EXPECT_FALSE(evaluate_formula(ast, fsm));
