@@ -223,3 +223,19 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 * Add a human-readable test (human-friendly, understandable model and properties to check)
 * Perhaps rethink model format to make partitioning actually usable
 * Performance tests
+
+# 2023-05-16
+
+## Research
+
+* [ITS-Tools](https://lip6.github.io/ITSTools-web/tpn.html): it seems that you can use this tool to convert a time petri net to a kripke structure, and to check the CTL properties relative to the time petri net. Here is the plan of how to make a performance test
+
+## Result
+
+* Human-readable tests (example from wikipedia and microwave from lectures)
+* Option to save AST in dot format
+
+## Next goal
+
+* Make performance test
+* Make final presentation

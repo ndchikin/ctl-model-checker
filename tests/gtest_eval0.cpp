@@ -67,3 +67,27 @@ TEST(Eval0, Test8) {
     FSM fsm(model0);
     EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
+
+TEST(Eval0, Test9) {
+    AST ast("EG(q)");
+    FSM fsm(model0);
+    EXPECT_TRUE(evaluate_formula(ast, fsm));
+}
+
+TEST(Eval0, Test10) {
+    AST ast("AG(p ∨ q)");
+    FSM fsm(model0);
+    EXPECT_TRUE(evaluate_formula(ast, fsm));
+}
+
+TEST(Eval0, Test11) {
+    AST ast("AG(q)");
+    FSM fsm(model0);
+    EXPECT_FALSE(evaluate_formula(ast, fsm));
+}
+
+TEST(Eval0, Test12) {
+    AST ast("EG(q)");
+    FSM fsm(model0);
+    EXPECT_TRUE(evaluate_formula(ast, fsm));
+}

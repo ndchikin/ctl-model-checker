@@ -26,6 +26,10 @@ CLI::CLI(int argc, const char* const argv[]) {
         .add_argument("--bdd-stats")
         .help("file path to file where to dump BDD usage statistic");
 
+    parser
+        .add_argument("--ast-dot")
+        .help("file path to file where to dump evaluated AST");
+
     try {
         parser.parse_args(argc, argv);
     } catch (const std::runtime_error& err) {
@@ -38,4 +42,5 @@ CLI::CLI(int argc, const char* const argv[]) {
     model = parser.get("-f");
     use_bst = parser.get<bool>("--use-bst");
     bdd_stats = parser.present("--bdd-stats");
+    ast_dot = parser.present("--ast-dot");
 }

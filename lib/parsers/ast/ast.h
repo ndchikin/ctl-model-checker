@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <tao/pegtl.hpp>
 #include <tao/pegtl/contrib/parse_tree.hpp>
 
@@ -20,4 +21,6 @@ public:
 
     explicit AST(const std::string& path, bool use_bst = false);
     explicit AST(const char* str, bool use_bst = false);
+
+    void to_dot(const std::string& path) const;
 };

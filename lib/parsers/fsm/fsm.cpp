@@ -118,7 +118,7 @@ void FSM::add_label(state_t state, state_t label) {
 
 FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
     init();
-    std::fstream input(path, std::ios_base::in);
+    std::ifstream input(path);
     if (!input) {
         throw std::runtime_error("Error opening file");
     }
@@ -127,7 +127,7 @@ FSM::FSM(const std::string& path) : all_variables(sylvan::sylvan_false), values(
 
 FSM::FSM(const char* str) : all_variables(sylvan::sylvan_false), values(STATE_BITS * 2) {
     init();
-    std::stringstream input(str);
+    std::istringstream input(str);
     read_fsm(input);
 }
 

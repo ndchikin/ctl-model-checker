@@ -2,7 +2,9 @@
 #include <parsers/ast/grammar.h>
 #include <parsers/ast/rewrite.h>
 #include <parsers/ast/visitors.h>
+#include <tao/pegtl/contrib/parse_tree_to_dot.hpp>
 
+#include <fstream>
 #include <memory>
 
 void AST::build_ast(bool use_bst) {
@@ -23,4 +25,9 @@ AST::AST(const std::string& path, bool use_bst) : file(new file_input<>(path)) {
 
 AST::AST(const char* str, bool use_bst) : memory(new memory_input<>(str, "")) {
     build_ast(use_bst);
+}
+
+void AST::to_dot(const std::string &path) const {
+    std::ofstream output(path);
+    parse_tree::print_dot(output, *root);
 }

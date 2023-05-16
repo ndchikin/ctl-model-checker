@@ -71,6 +71,7 @@ In fact, the format of our FSM model is the same as that of the Kripke structure
   4. Next m lines: state, state
 
 #### Example of FSM input format
+
 ```text
 3
 S0 2 begin start
