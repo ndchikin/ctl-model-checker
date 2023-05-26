@@ -44,7 +44,7 @@ test:
     - ctest -VV --output-junit junit.xml
   artifacts:
     reports:
-      junit: junit.xml
+      junit: build/junit.xml
 
 upload:
   stage: upload
