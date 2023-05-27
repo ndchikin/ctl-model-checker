@@ -63,7 +63,6 @@ test:
 coverage:
   stage: coverage
   script:
-    - cd build
     - lcov --summary build/coverage.info
   needs:
     - test
