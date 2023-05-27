@@ -1,8 +1,8 @@
 set(GCOV_TOOL "${PROJECT_SOURCE_DIR}/scripts/llvm-gcov.sh")
 
 function(setup_target_for_coverage_lcov)
-    set(oneValueArgs NAME)
-    set(multiValueArgs INCLUDE EXECUTABLE)
+    set(oneValueArgs NAME EXECUTABLE)
+    set(multiValueArgs INCLUDE)
     cmake_parse_arguments(Coverage "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     set(LCOV_INCLUDES "")
