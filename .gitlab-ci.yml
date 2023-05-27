@@ -77,6 +77,7 @@ upload:
     - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file programs/ctl-model-checker $FILE_PATH'
   needs:
     - test
+    - build_release
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: manual
