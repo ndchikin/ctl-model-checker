@@ -63,7 +63,8 @@ test:
 coverage:
   stage: coverage
   script:
-    - lcov --summary build/coverage.info
+    - cd build
+    - cmake --build . --target coverage
   needs:
     - test
     - build_coverage
