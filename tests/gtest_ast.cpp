@@ -29,12 +29,29 @@ bool compare_ast(const node_ptr& n1, const node_ptr& n2) {
     if (!compare_node(n1, n2)) {
         return false;
     }
+    if (n1->children.size() != n2->children.size()) {
+        return false;
+    }
     for (size_t i = 0; i < n1->children.size(); ++i) {
         if (!compare_ast(n1->children[i], n2->children[i])) {
             return false;
         }
     }
     return true;
+}
+
+TEST(AST, TestFalse) {
+    AST ast("¬f");
+    auto f = make_node<Atom>("f");
+    auto p = make_node<p0>();
+    auto and0 = make_node<And>();
+    auto eq = make_node<Eq>();
+    auto true0 = make_node<True>();
+    add_child(and0, p);
+    add_child(and0, f);
+    add_child(eq, and0);
+    add_child(eq, true0);
+    EXPECT_FALSE(compare_ast(ast.root, eq));
 }
 
 TEST(AST, DoubleNot) {

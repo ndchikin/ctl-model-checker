@@ -91,3 +91,9 @@ TEST(Eval0, Test12) {
     FSM fsm(model0);
     EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
+
+TEST(Eval0, Test13) {
+    AST ast("AX(p ⇔ p)");
+    FSM fsm(model0);
+    EXPECT_TRUE(evaluate_formula(ast, fsm));
+}

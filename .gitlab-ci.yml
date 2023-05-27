@@ -2,6 +2,7 @@ stages:
   - docker
   - build
   - test
+  - coverage
   - upload
 
 variables:
@@ -25,11 +26,11 @@ docker:
       changes:
         - Dockerfile
 
-build:
+build_release:
   stage: build
   script:
     - mkdir build && cd build
-    - export CC=clang-15 CXX=clang++-15
+    - export CC=clang CXX=clang++
     - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cmake --install .
   artifacts:
@@ -37,20 +38,45 @@ build:
       - build/
       - programs/
 
+build_coverage:
+  stage: build
+  script:
+    - mkdir build && cd build
+    - export CC=clang CXX=clang++
+    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Coverage ..
+    - cmake --build . --target tests
+  artifacts:
+    paths:
+      - build/
+
 test:
   stage: test
   script:
     - cd build
     - ctest -VV --output-junit junit.xml
+  needs:
+    - build_release
   artifacts:
     reports:
       junit: build/junit.xml
+
+coverage:
+  stage: coverage
+  script:
+    - cd build
+    - lcov --summary build/coverage.info
+  needs:
+    - test
+    - build_coverage
+  coverage: /functions.*%/
 
 upload:
   stage: upload
   script:
     - FILE_PATH=$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/ctl-model-checker/0.1/ctl-model-checker
     - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file programs/ctl-model-checker $FILE_PATH'
+  needs:
+    - test
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: manual
