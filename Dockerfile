@@ -7,4 +7,3 @@ RUN apt-get install -y cmake
 RUN apt-get install -y ninja-build
 RUN apt-get install -y curl
 RUN apt-get install -y lcov
-RUN apt-get install -y genhtml
