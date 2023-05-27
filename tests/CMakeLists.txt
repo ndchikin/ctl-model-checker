@@ -9,5 +9,5 @@ gtest_discover_tests(tests)
 setup_target_for_coverage_lcov(
     NAME coverage
     EXECUTABLE tests
-    EXCLUDE "src/*" "tests/*" "contrib/*" "/usr/include/*"
+    INCLUDE "lib/*"
 )
