@@ -253,3 +253,8 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 * Test coverage report in GitLab CI
 * Better documentation in README
 * Final presentation
+
+## Who did what
+
+* Jing - Presentation and research
+* Nikolay - Programming
