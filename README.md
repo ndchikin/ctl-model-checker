@@ -89,6 +89,10 @@ Optional arguments:
   --ast-dot             file path to file where to dump evaluated AST
 ```
 
+## How to use our code?
+
+We have 3 main classes in our program: [CLI](lib/parsers/cli/cli.h#L6) for parsing comand line arguments, [AST](lib/parsers/ast/ast.h#L13) to build abstract syntax tree and [FSM](lib/parsers/fsm/fsm.h#L20) to build the finate state machine. Formula evaluation can be performed with [evaluate_formula](lib/checker/checker.h#L6) function. You can see the example using all 4 of them in or [main](src/main.cpp#L8) function. It takes just 4 lines of code to perform model checking using our code!
+
 ## References
 
 [1] H. Iwashita, T. Nakata, and F. Hirose, CTL model checking based on forward state traversal. 1996, pp. 82–87. doi: 10.5555/244522.244536.
