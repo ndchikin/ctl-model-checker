@@ -65,16 +65,15 @@ git clone --recursive git@gitlab.unige.ch:Nikolay.Chikin/ctl-model-checker.git
 
 ```bash
 cd ctl-model-checker
-mkdir build && cd build
 export CC=clang CXX=clang++
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
-cmake --build . && cmake --install .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -B build
+cmake --build build --target install
 ```
 
 ### Run executable
 
 ```bash
-./../programs/CTL-model-checker --help
+./programs/ctl-model-checker --help
 ```
 
 ```text

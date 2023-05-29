@@ -29,10 +29,9 @@ docker:
 build_release:
   stage: build
   script:
-    - mkdir build && cd build
     - export CC=clang CXX=clang++
-    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
-    - cmake --build . && cmake --install .
+    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -B build
+    - cmake --build build --target install
   artifacts:
     paths:
       - build/
@@ -41,10 +40,9 @@ build_release:
 build_coverage:
   stage: build
   script:
-    - mkdir build && cd build
     - export CC=clang CXX=clang++
-    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Coverage ..
-    - cmake --build . --target tests
+    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Coverage -B build
+    - cmake --build build --target tests
   artifacts:
     paths:
       - build/
@@ -63,8 +61,7 @@ test:
 coverage:
   stage: coverage
   script:
-    - cd build
-    - cmake --build . --target coverage
+    - cmake --build build --target coverage
   needs:
     - test
     - build_coverage
