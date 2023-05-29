@@ -50,8 +50,7 @@ build_coverage:
 test:
   stage: test
   script:
-    - cd build
-    - ctest -VV --output-junit junit.xml
+    - ctest -VV --test-dir build --output-junit junit.xml
   needs:
     - build_release
   artifacts:
