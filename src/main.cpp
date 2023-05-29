@@ -8,16 +8,15 @@
 int main(int argc, char* argv[]) {
     const CLI cli(argc, argv);
     const AST ast(cli.formula, cli.use_bst);
-    const FSM fsm(cli.model);
-
-    std::cout << evaluate_formula(ast, fsm) << std::endl;
-
+    if (cli.model.has_value()) {
+        const FSM fsm(cli.model.value());
+        std::cout << evaluate_formula(ast, fsm) << std::endl;
+        if (cli.bdd_stats.has_value()) {
+            sylvan_stats(cli.bdd_stats.value());
+        }
+    }
     if (cli.ast_dot.has_value()) {
         ast.to_dot(cli.ast_dot.value());
     }
-    if (cli.bdd_stats.has_value()) {
-        sylvan_stats(cli.bdd_stats.value());
-    }
-
     return 0;
 }

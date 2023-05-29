@@ -13,8 +13,7 @@ CLI::CLI(int argc, const char* const argv[]) {
 
     parser
         .add_argument("-f", "--fsm-model")
-        .help("file path to file with FSM model")
-        .required();
+        .help("file path to file with FSM model");
 
     parser
         .add_argument("--use-bst")
@@ -38,8 +37,8 @@ CLI::CLI(int argc, const char* const argv[]) {
         std::exit(1);
     }
 
-    formula = parser.get("-c");
-    model = parser.get("-f");
+    formula = parser.get("--ctl-formula");
+    model = parser.present("--fsm-model");
     use_bst = parser.get<bool>("--use-bst");
     bdd_stats = parser.present("--bdd-stats");
     ast_dot = parser.present("--ast-dot");

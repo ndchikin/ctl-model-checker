@@ -18,14 +18,20 @@ const char* model1 =
     "S2 S3\n"
     "S3 S1\n";
 
-TEST(Eval1, Test0) {
-    AST ast("AG(EF(a))");
-    FSM fsm(model1);
+struct Model1 : public testing::TestWithParam<bool> {
+    static FSM fsm;
+};
+
+FSM Model1::fsm(model1);
+
+TEST_P(Model1, Test0) {
+    AST ast("AG(EF(a))", GetParam());
     EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
 
-TEST(Eval1, Test1) {
-    AST ast("A[b U c]");
-    FSM fsm(model1);
+TEST_P(Model1, Test1) {
+    AST ast("A[b U c]", GetParam());
     EXPECT_FALSE(evaluate_formula(ast, fsm));
 }
+
+INSTANTIATE_TEST_SUITE_P(Eval, Model1, testing::Values(true, false));

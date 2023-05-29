@@ -74,13 +74,13 @@ cmake --build . && cmake --install .
 ```
 
 ```text
-Usage: ctl-model-checker [--help] [--version] --ctl-formula VAR --fsm-model VAR [--use-bst] [--bdd-stats VAR] [--ast-dot VAR]
+Usage: ctl-model-checker [--help] [--version] --ctl-formula VAR [--fsm-model VAR] [--use-bst] [--bdd-stats VAR] [--ast-dot VAR]
 
 Optional arguments:
   -h, --help            shows help message and exits
   -v, --version         prints version information and exits
   -c, --ctl-formula     file path to file with CTL formula [required]
-  -f, --fsm-model       file path to file with FSM model [required]
+  -f, --fsm-model       file path to file with FSM model
   --use-bst             use backward state traversal, don't rewrites temporal operators using forward state traversal
   --bdd-stats           file path to file where to dump BDD usage statistic
   --ast-dot             file path to file where to dump evaluated AST

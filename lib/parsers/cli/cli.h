@@ -5,7 +5,7 @@
 
 struct CLI {
     std::string formula;
-    std::string model;
+    std::optional<std::string> model;
     bool use_bst;
     std::optional<std::string> bdd_stats;
     std::optional<std::string> ast_dot;

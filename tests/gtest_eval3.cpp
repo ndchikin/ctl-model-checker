@@ -14,32 +14,35 @@ const char* model3 =
     "S0 S2\n"
     "S2 S0\n";
 
-TEST(Eval3, Test0) {
-    AST ast("close ∧ off");
-    FSM fsm(model3);
+struct Model3 : public testing::TestWithParam<bool> {
+    static FSM fsm;
+};
+
+FSM Model3::fsm(model3);
+
+TEST_P(Model3, Test0) {
+    AST ast("close ∧ off", GetParam());
     EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
 
-TEST(Eval3, Test1) {
-    AST ast("EX(close ∧ on)");
-    FSM fsm(model3);
+TEST_P(Model3, Test1) {
+    AST ast("EX(close ∧ on)", GetParam());
     EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
 
-TEST(Eval3, Test2) {
-    AST ast("EX(open ∧ off)");
-    FSM fsm(model3);
+TEST_P(Model3, Test2) {
+    AST ast("EX(open ∧ off)", GetParam());
     EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
 
-TEST(Eval3, Test3) {
-    AST ast("AG(close ∨ off)");
-    FSM fsm(model3);
+TEST_P(Model3, Test3) {
+    AST ast("AG(close ∨ off)", GetParam());
     EXPECT_TRUE(evaluate_formula(ast, fsm));
 }
 
-TEST(Eval3, Test4) {
-    AST ast("EF(open ∧ on)");
-    FSM fsm(model3);
+TEST_P(Model3, Test4) {
+    AST ast("EF(open ∧ on)", GetParam());
     EXPECT_FALSE(evaluate_formula(ast, fsm));
 }
+
+INSTANTIATE_TEST_SUITE_P(Eval, Model3, testing::Values(true, false));
