@@ -1,0 +1,46 @@
+digraph parse_tree
+{
+  x0x136b940 [ label="Not" ]
+  x0x136b940 -> { x0x136b640 }
+  x0x136b640 [ label="Eq" ]
+  x0x136b640 -> { x0x136c000, x0x136b3c0 }
+  x0x136c000 [ label="And" ]
+  x0x136c000 -> { x0x136bcc0, x0x136b740, x0x136b540 }
+  x0x136bcc0 [ label="p0" ]
+  x0x136b740 [ label="Not" ]
+  x0x136b740 -> { x0x136bbc0 }
+  x0x136bbc0 [ label="EU" ]
+  x0x136bbc0 -> { x0x136b5c0, x0x136b4c0 }
+  x0x136b5c0 [ label="And" ]
+  x0x136b5c0 -> { x0x136b6c0, x0x136b8c0 }
+  x0x136b6c0 [ label="Not" ]
+  x0x136b6c0 -> { x0x136b840 }
+  x0x136b840 [ label="Atom\n\"req2\"" ]
+  x0x136b8c0 [ label="Not" ]
+  x0x136b8c0 -> { x0x136ba40 }
+  x0x136ba40 [ label="Atom\n\"idle2\"" ]
+  x0x136b4c0 [ label="And" ]
+  x0x136b4c0 -> { x0x136bac0, x0x136bdc0, x0x136bec0 }
+  x0x136bac0 [ label="Not" ]
+  x0x136bac0 -> { x0x136b7c0 }
+  x0x136b7c0 [ label="Atom\n\"end2\"" ]
+  x0x136bdc0 [ label="Not" ]
+  x0x136bdc0 -> { x0x136be40 }
+  x0x136be40 [ label="Atom\n\"req2\"" ]
+  x0x136bec0 [ label="Not" ]
+  x0x136bec0 -> { x0x136bf40 }
+  x0x136bf40 [ label="Atom\n\"idle2\"" ]
+  x0x136b540 [ label="Not" ]
+  x0x136b540 -> { x0x136bc40 }
+  x0x136bc40 [ label="EG" ]
+  x0x136bc40 -> { x0x136c080 }
+  x0x136c080 [ label="And" ]
+  x0x136c080 -> { x0x136c100, x0x136c240 }
+  x0x136c100 [ label="Not" ]
+  x0x136c100 -> { x0x136c180 }
+  x0x136c180 [ label="Atom\n\"req2\"" ]
+  x0x136c240 [ label="Not" ]
+  x0x136c240 -> { x0x136c2c0 }
+  x0x136c2c0 [ label="Atom\n\"idle2\"" ]
+  x0x136b3c0 [ label="False" ]
+}

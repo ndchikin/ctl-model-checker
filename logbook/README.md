@@ -239,3 +239,17 @@ Our CTL model checker takes a CTL formula and a model (FSM) as input. After a se
 
 * Make performance test
 * Make final presentation
+
+# 2023-05-23
+
+# 2023-05-30
+
+## Research
+
+* [lcov](https://github.com/linux-test-project/lcov): Used for test coverage calculation
+
+## Result
+
+* Test coverage report in GitLab CI
+* Better documentation in README
+* Final presentation

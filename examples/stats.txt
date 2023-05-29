@@ -1,0 +1,17 @@
+Sylvan statistics
+
+Tables
+MTBDD nodes created  4869            
+MTBDD nodes reused   247             
+Lookup iterations    84              
+Unique nodes table   5057 of 131072 buckets filled.
+Operation cache      2922 of 65536 buckets filled.
+Memory (nodes)       3.00 MB (max real) of 3.000 GB (allocated virtual memory).
+Memory (cache)       2.25 MB (max real) of 2.250 GB (allocated virtual memory).
+
+Operation            Count            Cache get        Cache put
+BDD and              2758             2755             3               
+BDD relnext          108              101              7               
+BDD relprev          144              138              5               
+
+Garbage collection
