@@ -3,7 +3,7 @@
 [![pipeline status](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/badges/main/pipeline.svg)](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/-/commits/main)
 [![coverage report](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/badges/main/coverage.svg)](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/-/commits/main)
 
-This project implements a Computation Tree Logic (CTL) model checker based on the forward state traversal algorithm described in a research paper [1]. The algorithm is designed to check many realistic CTL properties with minimal use of backward state traversal, making it more efficient. The implementation combines this algorithm with Binary Decision Diagram (BDD)-based state traversal techniques. The model checker has been tested and proven to correctly verify wide range of CTL properties of several models.
+This project implements a Computation Tree Logic (CTL) model checker based on the forward state traversal algorithm described in a research paper [1]. The algorithm is designed to check many realistic CTL properties with minimal use of backward state traversal, making it more efficient. The implementation combines this algorithm with Binary Decision Diagram (BDD)-based state traversal techniques. The model checker has been tested and proven to correctly verify wide range of CTL properties of several models. Take a look at [logbook](logbook) for implementation details.
 
 ## What is CTL?
 
