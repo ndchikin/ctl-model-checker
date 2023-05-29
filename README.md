@@ -17,13 +17,17 @@ CTL is widely used in model checking to formally verify properties of finite sta
 
 Forward state traversal in model checking is a technique that starts from a set of states and explores states using image operation. This approach is particularly beneficial when verifying Computation Tree Logic (CTL) properties. It allows for efficient checking of many realistic CTL properties without the need for more expensive backward state traversal, which uses pre-image operation. This approach has proven successful and efficient in verifying large Finite State Machines (FSMs), making it a practical method for large-scale industrial models.
 
+## Tests
+
+We check correctnes of evaluation for more than 20 CTL formulas and 4 different models using the standard backward state traversal algorithm and the forward state traversal algorithm from the paper. The models and formulas can be found in the [tests](tests) directory.
+
 ## Example run
 
-The [examples](examples) folder shows the result of executing [run.sh](examples/run.sh).
+The result of executing [run.sh](examples/run.sh) can be found in the [examples](examples) directory.
 
 ## Input formats
 
-You can find many examples in [tests](tests) folder.
+Examples can be found in the [tests](tests) directory.
 
 ### CTL formula
 
