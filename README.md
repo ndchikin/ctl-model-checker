@@ -1,9 +1,10 @@
 # CTL Model Checker
 
-[![pipeline status](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/badges/main/pipeline.svg)](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/-/commits/main)
-[![coverage report](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/badges/main/coverage.svg)](https://gitlab.unige.ch/Nikolay.Chikin/ctl-model-checker/-/commits/main)
+This project implements a Computation Tree Logic (CTL) model checker based on the forward state traversal algorithm described in a research paper [1]. The algorithm is designed to check many realistic CTL properties with minimal use of backward state traversal, making it more efficient. The implementation combines this algorithm with Binary Decision Diagram (BDD)-based state traversal techniques. The model checker has been tested and verified to correctly check a wide range of CTL properties on several models. Take a look at the [logbook](logbook) for implementation details.
 
-This project implements a Computation Tree Logic (CTL) model checker based on the forward state traversal algorithm described in a research paper [1]. The algorithm is designed to check many realistic CTL properties with minimal use of backward state traversal, making it more efficient. The implementation combines this algorithm with Binary Decision Diagram (BDD)-based state traversal techniques. The model checker has been tested and proven to correctly verify wide range of CTL properties of several models. Take a look at [logbook](logbook) for implementation details.
+**Tech stack:** C++23, CMake + Ninja, Clang, [Sylvan](https://github.com/trolando/sylvan) (BDDs), [PEGTL](https://github.com/taocpp/PEGTL) (formula parser), [argparse](https://github.com/p-ranav/argparse), GoogleTest, code coverage, clang-format / clang-tidy, Docker.
+
+University of Geneva project, spring 2023, by Nikolay Chikin and Jing Wen. The CI pipeline (Docker image, build, tests, coverage report, binary upload) ran on the university's GitLab; its configuration is kept in [.gitlab-ci.yml](.gitlab-ci.yml).
 
 ## What is CTL?
 
@@ -19,7 +20,7 @@ Forward state traversal in model checking is a technique that starts from a set 
 
 ## Tests
 
-We check correctnes of evaluation for more than 20 CTL formulas and 4 different models using the standard backward state traversal algorithm and the forward state traversal algorithm from the paper. The models and formulas can be found in the [tests](tests) directory.
+We check the correctness of evaluation for more than 20 CTL formulas and 4 different models using the standard backward state traversal algorithm and the forward state traversal algorithm from the paper. The models and formulas can be found in the [tests](tests) directory.
 
 ## Example run
 
@@ -35,7 +36,7 @@ The syntax defined on [wikipedia](https://en.wikipedia.org/wiki/Computation_tree
 
 ### FSM model
 
-In fact, the format of our FSM model is the same as that of the Kripke structure
+The format of our FSM model is the same as that of a Kripke structure.
 
 #### Specification of the FSM input format
 
@@ -46,7 +47,7 @@ In fact, the format of our FSM model is the same as that of the Kripke structure
 
 ## How to build
 
-You can take a look at [.gitlab-ci.yml](.gitlab-ci.yml) and [Dockerfile](Dockerfile). The later instructions have been tested to work on Ubuntu 22.04.1 LTS.
+See also [Dockerfile](Dockerfile) and [.gitlab-ci.yml](.gitlab-ci.yml). The instructions below have been tested on Ubuntu 22.04.1 LTS.
 
 ### Install required packages
 
@@ -58,7 +59,7 @@ sudo apt-get install git clang cmake ninja-build
 ### Clone repository
 
 ```bash
-git clone --recursive git@gitlab.unige.ch:Nikolay.Chikin/ctl-model-checker.git
+git clone --recursive https://github.com/ndchikin/ctl-model-checker.git
 ```
 
 ### Build project
@@ -91,7 +92,7 @@ Optional arguments:
 
 ## How to use our code?
 
-We have 3 main classes in our program: [CLI](lib/parsers/cli/cli.h#L6) for parsing comand line arguments, [AST](lib/parsers/ast/ast.h#L13) to build abstract syntax tree and [FSM](lib/parsers/fsm/fsm.h#L20) to build the finate state machine. Formula evaluation can be performed with [evaluate_formula](lib/checker/checker.h#L6) function. You can see the example using all 4 of them in or [main](src/main.cpp#L8) function. It takes just 4 lines of code to perform model checking using our code!
+We have 3 main classes in our program: [CLI](lib/parsers/cli/cli.h#L6) for parsing command-line arguments, [AST](lib/parsers/ast/ast.h#L13) to build abstract syntax tree and [FSM](lib/parsers/fsm/fsm.h#L20) to build the finite state machine. Formula evaluation can be performed with [evaluate_formula](lib/checker/checker.h#L6) function. You can see an example using all 4 of them in our [main](src/main.cpp#L8) function. It takes just 4 lines of code to perform model checking using our code!
 
 ## References
 
